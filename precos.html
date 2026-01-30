@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="pt-MZ">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preços | Lulú Eventos</title>
+    <meta
+      name="description"
+      content="Conheça nossos pacotes e preços para decoração de eventos. Pacotes a partir de 9000 MZN para 20 pessoas."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+    <link rel="icon" type="image/png" href="assets/logo.jpg" />
+    <style>
+      .price-hero {
+        background: linear-gradient(
+          135deg,
+          rgba(10, 10, 10, 0.9),
+          rgba(42, 42, 42, 0.8)
+        );
+        padding: 10rem 0 6rem;
+        text-align: center;
+        margin-top: 70px;
+      }
+      .price-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-top: 4rem;
+      }
+      .price-card {
+        background: var(--cinza-suave);
+        border: 1px solid rgba(212, 175, 55, 0.2);
+        padding: 2.5rem 2rem;
+        text-align: center;
+        transition: all 0.4s ease;
+      }
+      .price-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--dourado-metalico);
+        box-shadow: var(--shadow-strong);
+      }
+      .price-pessoas {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--branco-cream);
+        margin-bottom: 1rem;
+      }
+      .servicos-list {
+        margin-top: 3rem;
+      }
+      .servico-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--cinza-suave);
+        margin-bottom: 0.5rem;
+      }
+      @media (max-width: 768px) {
+        .price-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header scrolled">
+      <nav class="nav-container">
+        <a href="index.html" class="logo">Lulú Eventos</a>
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Início</a></li>
+          <li><a href="galeria.html" class="nav-link">Galeria</a></li>
+          <li><a href="precos.html" class="nav-link active">Preços</a></li>
+          <li><a href="sobre.html" class="nav-link">Sobre</a></li>
+          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+        </ul>
+        <button class="menu-toggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </header>
+
+    <section class="price-hero">
+      <div class="container">
+        <h1 class="fade-in-up">
+          Nossos <span class="texto-dourado">Preços</span>
+        </h1>
+        <div class="divider"></div>
+        <p
+          class="fade-in-up delay-100"
+          style="font-size: 1.2rem; max-width: 700px; margin: 0 auto"
+        >
+          Pacotes pensados para tornar seu evento inesquecível
+        </p>
+      </div>
+    </section>
+
+    <section style="padding: 6rem 0">
+      <div class="container">
+        <div class="section-title fade-in-up">
+          <h2>Pacote <span class="texto-dourado">Standard</span></h2>
+          <p>Todos os pacotes incluem serviços essenciais para seu evento</p>
+        </div>
+        <div class="price-grid" id="priceGrid"></div>
+      </div>
+    </section>
+
+    <section style="padding: 4rem 0; background: var(--cinza-suave)">
+      <div class="container">
+        <div class="section-title fade-in-up">
+          <h2>O Que Está <span class="texto-dourado">Incluído</span></h2>
+          <div class="divider"></div>
+        </div>
+        <div class="servicos-list" id="servicosList"></div>
+      </div>
+    </section>
+
+    <section style="padding: 6rem 0; text-align: center">
+      <div class="container fade-in-up">
+        <h2 style="margin-bottom: 1.5rem">
+          Precisa de um
+          <span class="texto-dourado">orçamento personalizado?</span>
+        </h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem">
+          Entre em contacto e criaremos um pacote sob medida para você
+        </p>
+        <a href="contacto.html" class="btn btn-primary"
+          >Solicitar Orçamento Personalizado</a
+        >
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Lulú Eventos</h3>
+            <p>
+              Transformamos sonhos em realidade com elegância e sofisticação.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>Links Rápidos</h3>
+            <a href="index.html">Início</a><a href="galeria.html">Galeria</a
+            ><a href="precos.html">Preços</a><a href="sobre.html">Sobre Nós</a
+            ><a href="contacto.html">Contacto</a>
+          </div>
+          <div class="footer-section">
+            <h3>Contacto</h3>
+            <a href="tel:+258865771736" data-contact="phone">+258 865771736</a
+            ><a href="mailto:contato@lulueventos.co.mz" data-contact="email"
+              >contato@lulueventos.co.mz</a
+            >
+            <p style="margin-top: 1rem">Maputo, Moçambique</p>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Lulú Eventos. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </footer>
+
+    <a href="#" class="whatsapp-float" aria-label="WhatsApp"
+      ><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M16 0C7.164 0 0 7.163 0 16c0 2.825.737 5.482 2.03 7.784L.05 31.95l8.35-2.02C10.654 31.236 13.258 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm8.047 22.914c-.357.996-2.103 1.826-2.903 1.947-.779.117-1.792.157-2.897-.183-.669-.206-1.528-.48-2.626-.938-4.597-1.916-7.59-6.58-7.82-6.883-.22-.303-1.858-2.48-1.858-4.729 0-2.25 1.176-3.352 1.594-3.81.417-.458.91-.573 1.213-.573.303 0 .607.003.873.014.28.013.655-.107.977.744.327.868 1.12 2.73 1.217 2.928.097.198.162.43.033.733-.13.303-.194.49-.387.754-.194.263-.408.588-.582.79-.194.227-.395.471-.17.925.226.454.998 1.645 2.143 2.664 1.473 1.31 2.714 1.719 3.1 1.914.387.194.614.162.84-.097.227-.26.97-1.133 1.23-1.52.26-.388.52-.324.873-.194.356.13 2.249 1.061 2.635 1.255.387.194.645.292.742.454.097.162.097.935-.26 1.931z"
+        /></svg
+    ></a>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const precos = await dataManager.getPrecos();
+        const servicos = await dataManager.getServicosIncluidos();
+        const priceGrid = document.getElementById("priceGrid");
+        const servicosList = document.getElementById("servicosList");
+
+        priceGrid.innerHTML = precos
+          .map(
+            (p, i) => `
+        <div class="price-card fade-in-up delay-${(i % 4) * 100}">
+          <div class="price-pessoas">${p.pessoas} <small style="font-size: 1rem; color: var(--dourado-metalico);">pessoas</small></div>
+          <div class="price-value">${formatPrice(p.preco)}</div>
+          <p style="margin-top: 1rem; opacity: 0.8;">Pacote ${p.categoria.charAt(0).toUpperCase() + p.categoria.slice(1)}</p>
+          <a href="contacto.html" class="btn btn-outline" style="margin-top: 1.5rem; width: 100%;">Solicitar</a>
+        </div>
+      `,
+          )
+          .join("");
+
+        servicosList.innerHTML = servicos
+          .map(
+            (s, i) => `
+        <div class="servico-item fade-in-left delay-${i * 100}">
+          <div style="font-size: 1.5rem; color: var(--dourado-metalico);">✓</div>
+          <div><strong>${s}</strong></div>
+        </div>
+      `,
+          )
+          .join("");
+      });
+    </script>
+  </body>
+</html>

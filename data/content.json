@@ -1,0 +1,51 @@
+{
+  "empresa": {
+    "nome": "Lulú Eventos",
+    "slogan": "Ornamentação para momentos especiais",
+    "descricao": "Transformamos seus sonhos em realidade com decorações luxuosas para casamentos, aniversários e eventos corporativos.",
+    "telefone": "+258865771736",
+    "whatsapp": "258865771736",
+    "email": "contacto@lulueventos.com",
+    "facebook": "@ornamentacaolulu",
+    "instagram": "@ornamentacaolulu",
+    "endereco": "Moçambique"
+  },
+  "pacotes": [
+    {
+      "nome": "Pacote Standard",
+      "precos": [
+        {"pessoas": 20, "valor": 9000, "moeda": "mts"},
+        {"pessoas": 30, "valor": 10500, "moeda": "mts"},
+        {"pessoas": 40, "valor": 12000, "moeda": "mts"},
+        {"pessoas": 50, "valor": 13500, "moeda": "mts"},
+        {"pessoas": 100, "valor": 22000, "moeda": "mts"},
+        {"pessoas": 150, "valor": 30000, "moeda": "mts"}
+      ],
+      "inclusoes": [
+        "Mesa de honra",
+        "Painel de fotos",
+        "Mesa de buffet",
+        "Mesinha de bolo",
+        "Tapete vermelho",
+        "Transporte"
+      ]
+    }
+  ],
+  "sobre": {
+    "titulo": "Sobre Nós",
+    "historia": "A Lulú Eventos nasceu da paixão por criar momentos inesquecíveis...",
+    "missao": "Transformar cada evento numa experiência única e memorável.",
+    "valores": ["Excelência", "Criatividade", "Pontualidade", "Dedicação"]
+  },
+  "galeria": {
+    "categorias": ["casamentos", "aniversarios", "baptizados", "corporativos", "churrascos"],
+    "imagens": []
+  },
+  "depoimentos": [
+    {
+      "nome": "Cliente Satisfeito",
+      "texto": "A decoração superou todas as expectativas!",
+      "estrelas": 5
+    }
+  ]
+}

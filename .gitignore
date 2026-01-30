@@ -1,0 +1,17 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ambiente
+.env
+.env.local
+
+# Temporários
+*.tmp
+*.temp

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin - Lulú Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; background: #0a0a0a; color: #f5f5f0; line-height: 1.6; }
+    .admin-header { background: #1a1a1a; padding: 1.5rem 2rem; border-bottom: 2px solid #D4AF37; }
+    .admin-header h1 { color: #D4AF37; font-size: 1.8rem; }
+    .admin-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .admin-section { background: #1a1a1a; padding: 2rem; margin-bottom: 2rem; border-left: 4px solid #D4AF37; }
+    .admin-section h2 { color: #D4AF37; margin-bottom: 1.5rem; font-size: 1.5rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; color: #D4AF37; font-weight: 600; }
+    .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; background: #2a2a2a; border: 1px solid #3a3a3a; color: #f5f5f0; font-family: inherit; font-size: 1rem; }
+    .form-group textarea { min-height: 100px; resize: vertical; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #D4AF37; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    table th, table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #3a3a3a; }
+    table th { background: #2a2a2a; color: #D4AF37; font-weight: 600; }
+    table input { width: 100%; padding: 0.5rem; background: #2a2a2a; border: 1px solid #3a3a3a; color: #f5f5f0; }
+    .btn { padding: 0.75rem 1.5rem; background: #D4AF37; color: #0a0a0a; border: none; font-weight: 600; cursor: pointer; font-size: 1rem; transition: all 0.3s; }
+    .btn:hover { background: #F4E5B8; transform: translateY(-2px); }
+    .btn-remove { padding: 0.5rem 1rem; background: #c0392b; color: white; border: none; cursor: pointer; font-size: 0.9rem; }
+    .btn-remove:hover { background: #e74c3c; }
+    .btn-add { padding: 0.5rem 1.5rem; background: #27ae60; color: white; border: none; cursor: pointer; font-weight: 600; margin-top: 1rem; }
+    .btn-add:hover { background: #2ecc71; }
+    .btn-group { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+    .servico-item, .valor-item { display: flex; gap: 1rem; margin-bottom: 0.5rem; align-items: center; }
+    .servico-item input, .valor-item input { flex: 1; }
+    .notification { position: fixed; top: 20px; right: 20px; padding: 1rem 2rem; background: #27ae60; color: white; border-radius: 4px; font-weight: 600; opacity: 0; transform: translateX(100%); transition: all 0.3s; z-index: 1000; }
+    .notification.show { opacity: 1; transform: translateX(0); }
+    .notification-error { background: #c0392b; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 2000; }
+    .modal-content { background: #1a1a1a; padding: 2rem; max-width: 600px; border: 2px solid #D4AF37; }
+    .modal-content h2 { color: #D4AF37; margin-bottom: 1rem; }
+    .modal-content ol { margin-left: 1.5rem; }
+    .modal-content li { margin-bottom: 0.5rem; }
+    .modal-close { margin-top: 1.5rem; }
+    .upload-area { border: 3px dashed rgba(212, 175, 55, 0.5); padding: 3rem; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(212, 175, 55, 0.05); }
+    .upload-area:hover { border-color: #D4AF37; background: rgba(212, 175, 55, 0.1); }
+    .upload-area.dragover { border-color: #D4AF37; background: rgba(212, 175, 55, 0.2); transform: scale(1.02); }
+    .upload-prompt h3 { color: #D4AF37; margin-bottom: 0.5rem; }
+    .gallery-grid-admin { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .gallery-item-admin { position: relative; aspect-ratio: 1; background: #2a2a2a; border: 2px solid #3a3a3a; overflow: hidden; }
+    .gallery-item-admin img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-item-admin .delete-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: #c0392b; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; opacity: 0; transition: opacity 0.3s; }
+    .gallery-item-admin:hover .delete-btn { opacity: 1; }
+    .gallery-item-admin .delete-btn:hover { background: #e74c3c; transform: scale(1.1); }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <h1>🎨 Painel de Administração - Lulú Eventos</h1>
+    <p style="margin-top: 0.5rem; opacity: 0.8;">Edite o conteúdo do seu site facilmente</p>
+  </header>
+
+  <div class="admin-container">
+    <div class="admin-section">
+      <h2>📝 Informações da Empresa</h2>
+      <div class="form-group">
+        <label>Nome da Empresa</label>
+        <input type="text" id="empresa_nome" placeholder="Lulú Eventos">
+      </div>
+      <div class="form-group">
+        <label>Slogan</label>
+        <input type="text" id="empresa_slogan" placeholder="Transformamos sonhos em realidade...">
+      </div>
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea id="empresa_descricao" placeholder="Descrição da empresa..."></textarea>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>📞 Informações de Contacto</h2>
+      <div class="form-group">
+        <label>Telefone (com código do país)</label>
+        <input type="text" id="telefone" placeholder="+258 865771736">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp (só números, sem +)</label>
+        <input type="text" id="whatsapp" placeholder="258865771736">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="contato@lulueventos.co.mz">
+      </div>
+      <div class="form-group">
+        <label>Facebook (com @)</label>
+        <input type="text" id="facebook" placeholder="@ornamentacaolulu">
+      </div>
+      <div class="form-group">
+        <label>Instagram (com @)</label>
+        <input type="text" id="instagram" placeholder="@ornamentacaolulu">
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>📊 Estatísticas</h2>
+      <div class="form-group">
+        <label>Eventos Realizados</label>
+        <input type="number" id="eventos_realizados" placeholder="500">
+      </div>
+      <div class="form-group">
+        <label>Anos de Experiência</label>
+        <input type="number" id="anos_experiencia" placeholder="8">
+      </div>
+      <div class="form-group">
+        <label>Clientes Satisfeitos</label>
+        <input type="number" id="clientes_satisfeitos" placeholder="450">
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>💰 Tabela de Preços</h2>
+      <p style="margin-bottom: 1rem; opacity: 0.8;">Edite os preços conforme necessário. Todos os valores em MZN.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>N° Pessoas</th>
+            <th>Preço (MZN)</th>
+            <th>Categoria</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="precosTableBody"></tbody>
+      </table>
+      <button id="addPrecoBtn" class="btn-add">+ Adicionar Preço</button>
+    </div>
+
+    <div class="admin-section">
+      <h2>✅ Serviços Incluídos</h2>
+      <div id="servicosList"></div>
+      <button id="addServicoBtn" class="btn-add">+ Adicionar Serviço</button>
+    </div>
+
+    <div class="admin-section">
+      <h2>ℹ️ Sobre a Empresa</h2>
+      <div class="form-group">
+        <label>Nossa História</label>
+        <textarea id="historia" placeholder="A história da empresa..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Nossa Missão</label>
+        <textarea id="missao" placeholder="Nossa missão é..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Nossos Valores</label>
+        <div id="valoresList"></div>
+        <button id="addValorBtn" class="btn-add">+ Adicionar Valor</button>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>🖼️ Galeria de Fotos</h2>
+      <p style="margin-bottom: 1.5rem; opacity: 0.8;">
+        Faça upload das fotos dos seus eventos. As imagens serão armazenadas no navegador.
+      </p>
+      
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+        <div class="upload-prompt">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📸</div>
+          <h3>Clique ou arraste fotos aqui</h3>
+          <p style="margin-top: 0.5rem; opacity: 0.7;">Formatos aceitos: JPG, PNG, WebP</p>
+        </div>
+      </div>
+      
+      <div class="gallery-preview" id="galleryPreview">
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--dourado-metalico);">
+          Fotos na Galeria (<span id="photoCount">0</span>)
+        </h3>
+        <div class="gallery-grid-admin" id="galleryGridAdmin">
+          <!-- Fotos serão inseridas aqui -->
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button id="exportBtn" class="btn">💾 Exportar Tudo (JSON + Fotos)</button>
+      <button id="previewBtn" class="btn" style="background: #3498db;">👁️ Visualizar Site</button>
+      <button id="clearGalleryBtn" class="btn" style="background: #c0392b;">🗑️ Limpar Galeria</button>
+    </div>
+  </div>
+
+  <div id="instructionsModal" class="modal">
+    <div class="modal-content">
+      <h2>📋 Configuração Salva!</h2>
+      <p>Suas configurações e fotos estão salvas no navegador (LocalStorage).</p>
+      
+      <h3 style="color: #D4AF37; margin-top: 1.5rem;">Como funciona:</h3>
+      <ol>
+        <li><strong>As fotos estão armazenadas no navegador</strong> - funcionam localmente</li>
+        <li>Para <strong>visualizar</strong>, clique em "👁️ Visualizar Site"</li>
+        <li>Abra o site normalmente no navegador e as fotos aparecerão</li>
+        <li>As fotos permanecerão mesmo se fechar e reabrir o navegador</li>
+      </ol>
+      
+      <h3 style="color: #D4AF37; margin-top: 1.5rem;">Para fazer deploy (Netlify):</h3>
+      <ol>
+        <li>As fotos em <strong>Base64 já estão no código</strong></li>
+        <li>Basta fazer upload da pasta completa na Netlify</li>
+        <li>Tudo funcionará automaticamente!</li>
+      </ol>
+      
+      <p style="margin-top: 1rem; padding: 1rem; background: rgba(212, 175, 55, 0.1); border-left: 3px solid #D4AF37;">
+        <strong>💡 Dica:</strong> O arquivo content.json foi baixado. Mantenha-o como backup das suas configurações de texto.
+      </p>
+      
+      <button class="btn modal-close" onclick="closeInstructions()">Entendi!</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
