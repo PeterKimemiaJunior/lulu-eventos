@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Debug - Lulú Eventos</title>
+  <style>
+    body { font-family: monospace; padding: 2rem; background: #1a1a1a; color: #fff; }
+    .section { margin: 2rem 0; padding: 1rem; background: #2a2a2a; border-left: 3px solid #D4AF37; }
+    .success { color: #4CAF50; }
+    .error { color: #f44336; }
+    .warning { color: #ff9800; }
+    h2 { color: #D4AF37; }
+    pre { background: #000; padding: 1rem; overflow-x: auto; }
+    img { width: 200px; height: 200px; object-fit: cover; margin: 0.5rem; border: 2px solid #D4AF37; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Debug - Lulú Eventos</h1>
+  
+  <div class="section">
+    <h2>1. Teste de Carregamento do JSON</h2>
+    <div id="jsonTest"></div>
+  </div>
+  
+  <div class="section">
+    <h2>2. Dados da Empresa</h2>
+    <div id="empresaTest"></div>
+  </div>
+  
+  <div class="section">
+    <h2>3. Preços</h2>
+    <div id="precosTest"></div>
+  </div>
+  
+  <div class="section">
+    <h2>4. Galeria</h2>
+    <div id="galeriaTest"></div>
+    <div id="galeriaImages" class="grid"></div>
+  </div>
+  
+  <div class="section">
+    <h2>5. Teste de Caminhos</h2>
+    <div id="pathTest"></div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script>
+    async function runTests() {
+      const results = [];
+      
+      // Teste 1: Carregar JSON
+      try {
+        const response = await fetch('./data/content.json');
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('jsonTest').innerHTML = `
+            <p class="success">✅ JSON carregado com sucesso</p>
+            <pre>${JSON.stringify(data, null, 2).substring(0, 500)}...</pre>
+          `;
+        } else {
+          document.getElementById('jsonTest').innerHTML = `
+            <p class="error">❌ Erro HTTP: ${response.status}</p>
+          `;
+        }
+      } catch (e) {
+        document.getElementById('jsonTest').innerHTML = `
+          <p class="error">❌ Erro: ${e.message}</p>
+        `;
+      }
+      
+      // Teste 2: Dados da Empresa
+      try {
+        const dados = await carregarDados();
+        document.getElementById('empresaTest').innerHTML = `
+          <p class="success">✅ Dados da empresa carregados</p>
+          <ul>
+            <li>Nome: ${dados.empresa.nome}</li>
+            <li>Telefone: ${dados.empresa.telefone}</li>
+            <li>Email: ${dados.empresa.email}</li>
+            <li>WhatsApp: ${dados.empresa.whatsapp}</li>
+          </ul>
+        `;
+      } catch (e) {
+        document.getElementById('empresaTest').innerHTML = `
+          <p class="error">❌ Erro: ${e.message}</p>
+        `;
+      }
+      
+      // Teste 3: Preços
+      try {
+        const dados = await carregarDados();
+        const precos = dados.precos.pacoteStandard;
+        document.getElementById('precosTest').innerHTML = `
+          <p class="success">✅ ${precos.length} pacotes de preços encontrados</p>
+          <ul>
+            ${precos.map(p => `<li>${p.pessoas} pessoas: ${formatarPreco(p.valor)}</li>`).join('')}
+          </ul>
+          <p><strong>Inclusões:</strong></p>
+          <ul>
+            ${dados.precos.inclusoesPacote.map(inc => `<li>${inc}</li>`).join('')}
+          </ul>
+        `;
+      } catch (e) {
+        document.getElementById('precosTest').innerHTML = `
+          <p class="error">❌ Erro: ${e.message}</p>
+        `;
+      }
+      
+      // Teste 4: Galeria
+      try {
+        const dados = await carregarDados();
+        const galeria = dados.galeria || [];
+        
+        if (galeria.length === 0) {
+          document.getElementById('galeriaTest').innerHTML = `
+            <p class="warning">⚠️ Galeria vazia no JSON</p>
+          `;
+        } else {
+          document.getElementById('galeriaTest').innerHTML = `
+            <p class="success">✅ ${galeria.length} imagens na galeria</p>
+            <ul>
+              ${galeria.slice(0, 3).map(img => `<li>${img.filename} - ${img.titulo}</li>`).join('')}
+              ${galeria.length > 3 ? `<li>... e mais ${galeria.length - 3} imagens</li>` : ''}
+            </ul>
+          `;
+          
+          // Renderizar imagens
+          document.getElementById('galeriaImages').innerHTML = galeria.map(img => `
+            <div>
+              <img src="./assets/galeria/${img.filename}" 
+                   alt="${img.titulo}"
+                   onerror="this.parentElement.innerHTML='<p class=error>❌ Erro ao carregar</p><p>${img.filename}</p>'">
+              <p style="font-size: 0.8rem; margin-top: 0.5rem;">${img.titulo}</p>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        document.getElementById('galeriaTest').innerHTML = `
+          <p class="error">❌ Erro: ${e.message}</p>
+        `;
+      }
+      
+      // Teste 5: Caminhos
+      const paths = [
+        './data/content.json',
+        './assets/galeria/img-1769860575191-0.jpg',
+        './js/data.js',
+        './js/gallery.js'
+      ];
+      
+      let pathResults = '<ul>';
+      for (const path of paths) {
+        try {
+          const response = await fetch(path, { method: 'HEAD' });
+          if (response.ok) {
+            pathResults += `<li class="success">✅ ${path}</li>`;
+          } else {
+            pathResults += `<li class="error">❌ ${path} (${response.status})</li>`;
+          }
+        } catch (e) {
+          pathResults += `<li class="error">❌ ${path} (${e.message})</li>`;
+        }
+      }
+      pathResults += '</ul>';
+      document.getElementById('pathTest').innerHTML = pathResults;
+    }
+    
+    // Executar testes quando página carregar
+    document.addEventListener('DOMContentLoaded', runTests);
+  </script>
+</body>
+</html>

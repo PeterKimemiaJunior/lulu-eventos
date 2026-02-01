@@ -1,209 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-MZ">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sobre Nós | Lulú Eventos</title>
-    <meta
-      name="description"
-      content="Conheça a história da Lulú Eventos. Anos de experiência criando eventos memoráveis em Moçambique."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/animations.css" />
-    <link rel="icon" type="image/png" href="assets/logo.jpg" />
-    <style>
-      .about-hero {
-        background: linear-gradient(
-          135deg,
-          rgba(10, 10, 10, 0.9),
-          rgba(42, 42, 42, 0.8)
-        );
-        padding: 10rem 0 6rem;
-        text-align: center;
-        margin-top: 70px;
-      }
-      .content-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
-        align-items: center;
-      }
-      .valores-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin-top: 3rem;
-      }
-      .valor-card {
-        background: var(--cinza-suave);
-        padding: 2rem;
-        text-align: center;
-        border-left: 3px solid var(--dourado-metalico);
-      }
-      @media (max-width: 768px) {
-        .content-section {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="header scrolled">
-      <nav class="nav-container">
-        <a href="index.html" class="logo">Lulú Eventos</a>
-        <ul class="nav-menu">
-          <li><a href="index.html" class="nav-link">Início</a></li>
-          <li><a href="galeria.html" class="nav-link">Galeria</a></li>
-          <li><a href="precos.html" class="nav-link">Preços</a></li>
-          <li><a href="sobre.html" class="nav-link active">Sobre</a></li>
-          <li><a href="contacto.html" class="nav-link">Contacto</a></li>
-        </ul>
-        <button class="menu-toggle" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre | Lulú Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .about-hero { background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(42, 42, 42, 0.8)); padding: 10rem 0 6rem; text-align: center; margin-top: 70px; }
+    .content-section { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    @media (max-width: 768px) { .content-section { grid-template-columns: 1fr; gap: 2rem; } }
+  </style>
+</head>
+<body>
+  <header class="header scrolled">
+    <nav class="nav-container">
+      <a href="index.html" class="logo">Lulú Eventos</a>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="galeria.html" class="nav-link">Galeria</a></li>
+        <li><a href="precos.html" class="nav-link">Preços</a></li>
+        <li><a href="sobre.html" class="nav-link active">Sobre</a></li>
+        <li><a href="contacto.html" class="nav-link">Contacto</a></li>
+      </ul>
+      <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+  </header>
 
-    <section class="about-hero">
-      <div class="container">
-        <h1 class="fade-in-up">
-          Sobre a <span class="texto-dourado">Lulú Eventos</span>
-        </h1>
+  <section class="about-hero">
+    <div class="container">
+      <h1 class="fade-in-up">Sobre a <span class="texto-dourado">Lulú Eventos</span></h1>
+      <div class="divider"></div>
+      <p class="fade-in-up delay-100" style="font-size: 1.2rem;">Paixão, criatividade e excelência</p>
+    </div>
+  </section>
+
+  <section style="padding: 6rem 0;">
+    <div class="container">
+      <div class="content-section">
+        <div class="fade-in-left">
+          <h2 style="margin-bottom: 2rem;">Nossa <span class="texto-dourado">História</span></h2>
+          <div id="historia"></div>
+        </div>
+        <div class="fade-in-right">
+          <div style="width: 100%; height: 400px; background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(10, 10, 10, 0.8)); display: flex; align-items: center; justify-content: center; border: 2px solid var(--dourado-metalico);">
+            <span style="font-size: 3rem; color: var(--dourado-metalico);">🎉</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding: 6rem 0; background: var(--cinza-suave);">
+    <div class="container">
+      <div class="section-title fade-in-up">
+        <h2>Nossa <span class="texto-dourado">Missão</span></h2>
         <div class="divider"></div>
-        <p
-          class="fade-in-up delay-100"
-          style="font-size: 1.2rem; max-width: 700px; margin: 0 auto"
-        >
-          Paixão, criatividade e excelência em cada detalhe
-        </p>
       </div>
-    </section>
+      <div id="missao" class="fade-in-up delay-200" style="text-align: center; max-width: 800px; margin: 2rem auto; font-size: 1.2rem;"></div>
+    </div>
+  </section>
 
-    <section style="padding: 6rem 0">
-      <div class="container">
-        <div class="content-section">
-          <div class="fade-in-left">
-            <h2 style="margin-bottom: 2rem">
-              Nossa <span class="texto-dourado">História</span>
-            </h2>
-            <div id="historia"></div>
-          </div>
-          <div class="fade-in-right">
-            <div
-              style="
-                width: 100%;
-                height: 400px;
-                background: linear-gradient(
-                  135deg,
-                  rgba(212, 175, 55, 0.2),
-                  rgba(10, 10, 10, 0.8)
-                );
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 2px solid var(--dourado-metalico);
-              "
-            >
-              <span style="font-size: 3rem; color: var(--dourado-metalico)"
-                >🎉</span
-              >
-            </div>
-          </div>
-        </div>
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section"><h3>Lulú Eventos</h3><p>Transformamos sonhos em realidade.</p></div>
+        <div class="footer-section"><h3>Links</h3><a href="index.html">Início</a><a href="galeria.html">Galeria</a><a href="precos.html">Preços</a><a href="sobre.html">Sobre</a><a href="contacto.html">Contacto</a></div>
+        <div class="footer-section"><h3>Contacto</h3><a href="tel:+258865771736">+258 865771736</a><a href="mailto:contacto@lulueventos.com">contacto@lulueventos.com</a></div>
       </div>
-    </section>
+      <div class="footer-bottom"><p>&copy; 2026 Lulú Eventos.</p></div>
+    </div>
+  </footer>
 
-    <section style="padding: 6rem 0; background: var(--cinza-suave)">
-      <div class="container">
-        <div class="section-title fade-in-up">
-          <h2>Nossa <span class="texto-dourado">Missão</span></h2>
-          <div class="divider"></div>
-        </div>
-        <div
-          id="missao"
-          class="fade-in-up delay-200"
-          style="
-            text-align: center;
-            max-width: 800px;
-            margin: 2rem auto;
-            font-size: 1.2rem;
-          "
-        ></div>
-      </div>
-    </section>
+  <a href="#" class="whatsapp-float" onclick="abrirWhatsApp(); return false;" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 0C7.164 0 0 7.163 0 16c0 2.825.737 5.482 2.03 7.784L.05 31.95l8.35-2.02C10.654 31.236 13.258 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm8.047 22.914c-.357.996-2.103 1.826-2.903 1.947-.779.117-1.792.157-2.897-.183-.669-.206-1.528-.48-2.626-.938-4.597-1.916-7.59-6.58-7.82-6.883-.22-.303-1.858-2.48-1.858-4.729 0-2.25 1.176-3.352 1.594-3.81.417-.458.91-.573 1.213-.573.303 0 .607.003.873.014.28.013.655-.107.977.744.327.868 1.12 2.73 1.217 2.928.097.198.162.43.033.733-.13.303-.194.49-.387.754-.194.263-.408.588-.582.79-.194.227-.395.471-.17.925.226.454.998 1.645 2.143 2.664 1.473 1.31 2.714 1.719 3.1 1.914.387.194.614.162.84-.097.227-.26.97-1.133 1.23-1.52.26-.388.52-.324.873-.194.356.13 2.249 1.061 2.635 1.255.387.194.645.292.742.454.097.162.097.935-.26 1.931z"/></svg>
+  </a>
 
-    <section style="padding: 6rem 0">
-      <div class="container">
-        <div class="section-title fade-in-up">
-          <h2>Nossos <span class="texto-dourado">Valores</span></h2>
-          <div class="divider"></div>
-        </div>
-        <div class="valores-grid" id="valoresGrid"></div>
-      </div>
-    </section>
-
-    <footer>
-      <div class="container">
-        <div class="footer-content">
-          <div class="footer-section">
-            <h3>Lulú Eventos</h3>
-            <p>
-              Transformamos sonhos em realidade com elegância e sofisticação.
-            </p>
-          </div>
-          <div class="footer-section">
-            <h3>Links Rápidos</h3>
-            <a href="index.html">Início</a><a href="galeria.html">Galeria</a
-            ><a href="precos.html">Preços</a><a href="sobre.html">Sobre Nós</a
-            ><a href="contacto.html">Contacto</a>
-          </div>
-          <div class="footer-section">
-            <h3>Contacto</h3>
-            <a href="tel:+258865771736" data-contact="phone">+258 865771736</a
-            ><a href="mailto:contato@lulueventos.co.mz" data-contact="email"
-              >contato@lulueventos.co.mz</a
-            >
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Lulú Eventos. Todos os direitos reservados.</p>
-        </div>
-      </div>
-    </footer>
-
-    <a href="#" class="whatsapp-float" aria-label="WhatsApp"
-      ><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M16 0C7.164 0 0 7.163 0 16c0 2.825.737 5.482 2.03 7.784L.05 31.95l8.35-2.02C10.654 31.236 13.258 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm8.047 22.914c-.357.996-2.103 1.826-2.903 1.947-.779.117-1.792.157-2.897-.183-.669-.206-1.528-.48-2.626-.938-4.597-1.916-7.59-6.58-7.82-6.883-.22-.303-1.858-2.48-1.858-4.729 0-2.25 1.176-3.352 1.594-3.81.417-.458.91-.573 1.213-.573.303 0 .607.003.873.014.28.013.655-.107.977.744.327.868 1.12 2.73 1.217 2.928.097.198.162.43.033.733-.13.303-.194.49-.387.754-.194.263-.408.588-.582.79-.194.227-.395.471-.17.925.226.454.998 1.645 2.143 2.664 1.473 1.31 2.714 1.719 3.1 1.914.387.194.614.162.84-.097.227-.26.97-1.133 1.23-1.52.26-.388.52-.324.873-.194.356.13 2.249 1.061 2.635 1.255.387.194.645.292.742.454.097.162.097.935-.26 1.931z"
-        /></svg
-    ></a>
-
-    <script src="js/data.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        const sobre = await dataManager.getSobre();
-        document.getElementById("historia").innerHTML =
-          `<p style="font-size: 1.1rem; line-height: 1.8;">${sobre.historia}</p>`;
-        document.getElementById("missao").innerHTML = `<p>${sobre.missao}</p>`;
-        document.getElementById("valoresGrid").innerHTML = sobre.valores
-          .map(
-            (v, i) => `
-        <div class="valor-card fade-in-up delay-${i * 100}">
-          <div style="font-size: 2.5rem; color: var(--dourado-metalico); margin-bottom: 1rem;">✨</div>
-          <h4>${v}</h4>
-        </div>
-      `,
-          )
-          .join("");
-      });
-    </script>
-  </body>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const dados = await carregarDados();
+        document.getElementById('historia').innerHTML = `<p style="font-size: 1.1rem; line-height: 1.8;">${dados.sobre.historia}</p>`;
+        document.getElementById('missao').innerHTML = `<p>${dados.sobre.missao}</p>`;
+      } catch (erro) {
+        console.error('Erro:', erro);
+      }
+    });
+  </script>
+</body>
 </html>

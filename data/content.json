@@ -1,8 +1,8 @@
 {
   "meta": {
     "versao": "1.0",
-    "ultimaAtualizacao": "2024-01-31",
-    "totalImagens": 0
+    "ultimaAtualizacao": "2026-01-31",
+    "totalImagens": 12
   },
   "empresa": {
     "nome": "Lulú Eventos",
@@ -34,8 +34,21 @@
   },
   "sobre": {
     "titulo": "Sobre Nós",
-    "historia": "A Lulú Eventos nasceu da paixão por criar momentos inesquecíveis. Começamos com um sonho: transformar cada evento em uma experiência única e memorável. Hoje, somos referência em decoração de luxo em Moçambique.",
-    "missao": "Nossa missão é transformar seus sonhos em realidade, criando ambientes sofisticados e elegantes que refletem a essência de cada celebração."
+    "historia": "A Lulú Eventos nasceu da paixão por criar momentos inesquecíveis.",
+    "missao": "Transformar seus sonhos em realidade com elegância e sofisticação."
   },
-  "galeria": []
+  "galeria": [
+    {"id": "f5a33fb9-aff0-43ee-9573-f592abc708cf", "filename": "img-1769860575191-0.jpg", "titulo": "IMG-20260130-WA0000", "ordem": 0},
+    {"id": "cf120b58-2e2d-413c-a196-4a28d62fc4bb", "filename": "img-1769860575192-1.jpg", "titulo": "IMG-20260130-WA0001", "ordem": 1},
+    {"id": "8c0babe8-fd4b-49ee-828a-06a28883c34c", "filename": "img-1769860575196-2.jpg", "titulo": "IMG-20260130-WA0002", "ordem": 2},
+    {"id": "ffa2d063-75fa-4d66-8725-7c21ab0cbbba", "filename": "img-1769860575196-3.jpg", "titulo": "IMG-20260130-WA0003", "ordem": 3},
+    {"id": "1b0d1857-0392-42cb-b1d5-0d64abcd4b98", "filename": "img-1769860575197-4.jpg", "titulo": "IMG-20260130-WA0004", "ordem": 4},
+    {"id": "1af7313c-848f-441e-9c82-7463ca1de62c", "filename": "img-1769860575197-5.jpg", "titulo": "IMG-20260130-WA0005", "ordem": 5},
+    {"id": "02f6d9a0-6483-4ee7-8022-f1866562232f", "filename": "img-1769860575197-6.jpg", "titulo": "IMG-20260130-WA0006", "ordem": 6},
+    {"id": "ba39231a-5960-4b8e-b0b5-d26c1e10c3e1", "filename": "img-1769860575197-7.jpg", "titulo": "IMG-20260130-WA0007", "ordem": 7},
+    {"id": "93d3bb6d-8cbc-4acc-8aff-b4c82cc2c9d2", "filename": "img-1769860575197-8.jpg", "titulo": "IMG-20260130-WA0008", "ordem": 8},
+    {"id": "30e97bc6-d842-4d51-9b5b-8e8811f8252b", "filename": "img-1769860575197-9.jpg", "titulo": "IMG-20260130-WA0009", "ordem": 9},
+    {"id": "e22629d3-f52c-44cf-b2df-993675397f97", "filename": "img-1769860575198-10.jpg", "titulo": "IMG-20260130-WA0010", "ordem": 10},
+    {"id": "06e28029-2b3d-47bf-bb9d-3a4ddcdd2dde", "filename": "img-1769860575199-11.jpg", "titulo": "IMG-20260130-WA0011", "ordem": 11}
+  ]
 }

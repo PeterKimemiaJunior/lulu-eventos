@@ -26,6 +26,8 @@ function initNavigation() {
   const navMenu = document.querySelector('.nav-menu');
   const navLinks = document.querySelectorAll('.nav-link');
 
+  if (!header) return;
+
   // Header transparente vira sólido ao scrollar
   let lastScroll = 0;
   
@@ -84,7 +86,7 @@ function initNavigation() {
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href'));
       if (target) {
-        const offsetTop = target.offsetTop - 100; // Compensar altura do header
+        const offsetTop = target.offsetTop - 100;
         window.scrollTo({
           top: offsetTop,
           behavior: 'smooth'
@@ -98,7 +100,6 @@ function initNavigation() {
 // EFEITOS DE SCROLL
 // ============================================
 function initScrollEffects() {
-  // Parallax suave em backgrounds
   const parallaxElements = document.querySelectorAll('.parallax-bg');
   
   if (parallaxElements.length > 0) {
@@ -131,7 +132,6 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        // Opcional: parar de observar após revelar
         observer.unobserve(entry.target);
       }
     });
@@ -154,13 +154,11 @@ function initLazyLoading() {
         if (entry.isIntersecting) {
           const img = entry.target;
           
-          // Adicionar classe quando carregar
           img.addEventListener('load', () => {
             img.classList.add('loaded');
             img.parentElement?.classList.remove('img-placeholder');
           });
           
-          // Se já estiver carregada
           if (img.complete) {
             img.classList.add('loaded');
             img.parentElement?.classList.remove('img-placeholder');
@@ -176,7 +174,6 @@ function initLazyLoading() {
       imageObserver.observe(img);
     });
   } else {
-    // Fallback para navegadores sem suporte
     lazyImages.forEach(img => {
       img.src = img.dataset.src || img.src;
     });
@@ -190,8 +187,9 @@ function initWhatsAppButton() {
   const whatsappBtn = document.querySelector('.whatsapp-float');
   
   if (whatsappBtn) {
-    whatsappBtn.addEventListener('click', () => {
-      openWhatsApp('Olá! Gostaria de solicitar um orçamento para o meu evento.');
+    whatsappBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      abrirWhatsApp('Olá! Gostaria de solicitar um orçamento para o meu evento.');
     });
   }
 }
@@ -201,12 +199,13 @@ function initWhatsAppButton() {
 // ============================================
 async function loadContactInfo() {
   try {
-    const contactos = await dataManager.getContactos();
+    const dados = await carregarDados();
+    const contactos = dados.empresa;
     
     // Atualizar todos os links de contato na página
     document.querySelectorAll('[data-contact="phone"]').forEach(el => {
       el.textContent = contactos.telefone;
-      el.href = getTelLink(contactos.telefone);
+      el.href = `tel:${contactos.telefone}`;
     });
     
     document.querySelectorAll('[data-contact="email"]').forEach(el => {
@@ -215,7 +214,7 @@ async function loadContactInfo() {
     });
     
     document.querySelectorAll('[data-contact="whatsapp"]').forEach(el => {
-      el.href = getWhatsAppLink(contactos.whatsapp);
+      el.href = criarLinkWhatsApp(contactos.whatsapp);
     });
     
     document.querySelectorAll('[data-contact="facebook"]').forEach(el => {
@@ -238,7 +237,7 @@ async function loadContactInfo() {
 // ============================================
 function animateCounter(element, target, duration = 2000) {
   let current = 0;
-  const increment = target / (duration / 16); // 60 FPS
+  const increment = target / (duration / 16);
   
   const updateCounter = () => {
     current += increment;
@@ -254,7 +253,6 @@ function animateCounter(element, target, duration = 2000) {
   updateCounter();
 }
 
-// Iniciar contadores quando visíveis
 function initCounters() {
   const counters = document.querySelectorAll('.counter');
   
@@ -278,7 +276,6 @@ function initCounters() {
   counters.forEach(counter => observer.observe(counter));
 }
 
-// Chamar quando DOM carregar
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initCounters);
 } else {
@@ -288,8 +285,6 @@ if (document.readyState === 'loading') {
 // ============================================
 // UTILITÁRIOS
 // ============================================
-
-// Debounce para performance em scroll
 function debounce(func, wait = 10) {
   let timeout;
   return function executedFunction(...args) {
@@ -302,7 +297,6 @@ function debounce(func, wait = 10) {
   };
 }
 
-// Throttle para performance em scroll
 function throttle(func, limit = 100) {
   let inThrottle;
   return function(...args) {
@@ -314,7 +308,6 @@ function throttle(func, limit = 100) {
   };
 }
 
-// Exportar funções úteis
 window.animateCounter = animateCounter;
 window.debounce = debounce;
 window.throttle = throttle;
