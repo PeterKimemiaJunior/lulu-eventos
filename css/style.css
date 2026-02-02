@@ -539,3 +539,60 @@ footer {
 
 .hidden { display: none; }
 .visible { display: block; }
+
+/* Container que agrupa os links */
+.footer-social-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaço entre as linhas */
+    margin-top: 20px;
+}
+
+/* O link em si */
+.luxury-social-link {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espaço entre o ícone e o texto */
+    text-decoration: none;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+
+/* Estilo do Ícone dentro do círculo */
+.luxury-social-link i {
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--dourado-metalico);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dourado-metalico);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    flex-shrink: 0; /* Impede que o círculo seja esmagado */
+}
+
+/* Estilo do Texto (@...) */
+.luxury-social-link span {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--branco-cream);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    white-space: nowrap; /* Impede o texto de quebrar linha e se sobrepor */
+}
+
+/* Efeito Hover - Luxo Profissional */
+.luxury-social-link:hover i {
+    background: var(--dourado-metalico);
+    color: var(--preto-profundo);
+    transform: translateY(-3px) rotate(8deg); /* Pequena rotação charmosa */
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+.luxury-social-link:hover span {
+    color: var(--dourado-metalico);
+    padding-left: 5px; /* Pequeno deslize do texto ao passar o mouse */
+}
