@@ -1,282 +1,401 @@
-# Lulú Eventos - Website
+# 🎉 Lulú Eventos - Website Oficial
 
-Website de ornamentação e decoração de eventos.
-
-## Estrutura de Edição
-
-### Para editar conteúdo (Admin Leigo):
-
-1. Abra o arquivo `data/content.json` em qualquer editor de texto
-2. Edite os preços, textos e informações de contacto
-3. Salve o arquivo
-
-### Para adicionar fotos:
-
-1. Coloque as imagens na pasta `assets/galeria/` na subpasta correspondente:
-   - `casamentos/` - Fotos de casamentos
-   - `aniversarios/` - Fotos de aniversários
-   - `baptizados/` - Fotos de baptizados
-   - `corporativos/` - Eventos corporativos
-   - `churrascos/` - Churrasco e eventos informais
-
-2. Renomeie as fotos de forma simples: foto1.jpg, foto2.jpg, etc.
-
-### Cores do Tema (Não alterar sem conhecimento):
-
-- Dourado: #D4AF37
-- Preto: #0a0a0a
-- Branco/Creme: #f5f5f0
-
-## Deploy na Netlify
-
-Arraste a pasta inteira para https://app.netlify.com/drop
-
-# 🎨 Lulú Eventos - Website Oficial
-
-Website profissional para a **Lulú Eventos**, empresa especializada em decoração de eventos de luxo em Moçambique.
+Website profissional para **Lulú Eventos**, empresa especializada em decoração e ornamentação de eventos em Moçambique.
 
 ## 📋 Sobre o Projeto
 
-Site desenvolvido com tecnologias web modernas (HTML5, CSS3, JavaScript vanilla) com foco em:
+Sistema de website completo com painel administrativo offline para gestão de conteúdo, incluindo galeria de fotos, preços e informações da empresa.
 
-- ✨ Design sofisticado e elegante (preto, dourado, creme)
-- 📱 100% Responsivo (mobile-first)
-- ⚡ Performance otimizada
-- 🎯 SEO configurado para Moçambique
-- 🔧 Sistema de edição simplificado
+### ✨ Características Principais
 
-## 🚀 Como Fazer Deploy na Netlify
+- **Design Responsivo** - Adaptado para desktop, tablet e mobile
+- **Paleta Elegante** - Preto (#0a0a0a) e Dourado (#D4AF37)
+- **Painel Admin Offline** - Gestão de conteúdo sem necessidade de servidor
+- **Sistema de Galeria** - Suporta múltiplas fotos com metadata
+- **Exportação ZIP** - Workflow profissional admin → técnico → deploy
+- **SEO Otimizado** - Meta tags e estrutura semântica
 
-### Opção 1: Arrastar e Soltar (Mais Fácil)
-
-1. Acesse [https://app.netlify.com/drop](https://app.netlify.com/drop)
-2. Arraste a pasta `lulu-eventos` completa para a área indicada
-3. Aguarde o upload completar
-4. Seu site estará online em segundos!
-
-### Opção 2: Conectar com GitHub
-
-1. Faça upload do projeto para um repositório GitHub
-2. Conecte sua conta Netlify ao GitHub
-3. Selecione o repositório
-4. Deploy automático configurado!
-
-## 📝 Como Editar o Conteúdo do Site
-
-### Método 1: Painel Admin Local (Recomendado)
-
-1. **Abra o arquivo `admin.html`** no seu navegador
-   - Clique duas vezes no arquivo
-   - Ou clique com botão direito → "Abrir com" → Seu navegador
-
-2. **Edite os campos desejados:**
-   - Informações da empresa
-   - Telefones e redes sociais
-   - Preços (adicione ou remova linhas)
-   - Serviços incluídos
-   - Texto sobre a empresa
-
-3. **Clique em "Exportar config.json"**
-   - O arquivo será baixado automaticamente
-
-4. **Substitua o arquivo antigo:**
-   - Vá até a pasta `data/`
-   - Substitua o `content.json` pelo novo arquivo baixado
-
-5. **Faça upload na Netlify:**
-   - Entre no painel da Netlify
-   - Vá em "Deploys" → "Drag and drop"
-   - Arraste a pasta `lulu-eventos` atualizada
-
-### Método 2: Editar JSON Diretamente
-
-Abra o arquivo `data/content.json` em qualquer editor de texto e edite os valores:
-
-```json
-{
-  "empresa": {
-    "nome": "Lulú Eventos",
-    "slogan": "Seu novo slogan aqui"
-  },
-  "contactos": {
-    "telefone": "+258 865771736",
-    "whatsapp": "258865771736"
-  }
-}
-```
-
-**⚠️ IMPORTANTE:** Mantenha a estrutura do JSON (aspas, vírgulas, chaves)
-
-### Método 3: Google Sheets (Avançado)
-
-Para editar pelo celular usando o app do Google Sheets:
-
-1. **Configure o Google Sheets:**
-   - Crie uma planilha com as colunas: `campo`, `valor`
-   - Preencha com seus dados
-   - Vá em "Arquivo" → "Compartilhar" → "Publicar na Web"
-   - Selecione "Valores separados por vírgula (.csv)"
-   - Copie o link gerado
-
-2. **Conecte ao site:**
-   - Abra o arquivo `js/data.js`
-   - Encontre a linha `useGoogleSheets: false`
-   - Mude para `useGoogleSheets: true`
-   - Cole o link do Sheets em `googleSheetsURL`
-
-3. **Edite pelo celular:**
-   - Abra o app Google Sheets
-   - Edite os valores
-   - As mudanças aparecem automaticamente em até 5 minutos!
-
-## 🖼️ Como Adicionar Fotos na Galeria
-
-1. **Organize suas fotos:**
-
-   ```
-   assets/galeria/
-   ├── casamento/
-   │   ├── img1.jpg
-   │   ├── img2.jpg
-   │   └── img3.jpg
-   ├── aniversario/
-   │   └── ...
-   ├── corporativo/
-   │   └── ...
-   └── baptizado/
-       └── ...
-   ```
-
-2. **Edite o arquivo de configuração:**
-   - Abra `js/gallery.js`
-   - Encontre a seção `GALLERY_CONFIG`
-   - Adicione suas imagens seguindo o padrão:
-
-   ```javascript
-   {
-     id: 17,
-     category: 'casamento',
-     src: 'assets/galeria/casamento/img5.jpg',
-     alt: 'Descrição da foto'
-   }
-   ```
-
-3. **Otimize as imagens (Recomendado):**
-   - Use ferramentas online como [TinyPNG](https://tinypng.com)
-   - Redimensione para máximo 1920px de largura
-   - Mantenha qualidade entre 70-85%
-
-## 📞 Informações de Contacto
-
-**Telefone:** +258 865771736  
-**WhatsApp:** 258865771736  
-**Facebook:** @ornamentacaolulu  
-**Instagram:** @ornamentacaolulu
-
-## 🛠️ Estrutura do Projeto
+## 🗂️ Estrutura do Projeto
 
 ```
 lulu-eventos/
+├── admin.html              # Painel administrativo
 ├── index.html              # Página inicial
 ├── galeria.html            # Galeria de fotos
 ├── precos.html             # Tabela de preços
 ├── sobre.html              # Sobre a empresa
-├── contacto.html           # Página de contacto
-├── admin.html              # Painel de administração
+├── contacto.html           # Formulário de contato
+│
 ├── css/
 │   ├── style.css           # Estilos principais
 │   └── animations.css      # Animações e efeitos
+│
 ├── js/
-│   ├── main.js             # JavaScript principal
-│   ├── data.js             # Gerenciamento de dados
+│   ├── data.js             # Sistema de carregamento de dados
+│   ├── main.js             # Scripts principais
 │   ├── gallery.js          # Funcionalidades da galeria
-│   └── admin.js            # Painel admin
+│   └── admin.js            # Lógica do painel admin
+│
+├── data/
+│   └── content.json        # Conteúdo dinâmico (preços, galeria, textos)
+│
 ├── assets/
-│   ├── logo.jpg            # Logo da empresa
-│   └── galeria/            # Fotos dos eventos
-└── data/
-    └── content.json        # Dados do site (EDITE AQUI!)
+│   ├── galeria/            # Fotos dos eventos
+│   ├── logo.png
+│   ├── logo.svg
+│   └── logo-branco.png
+│
+└── README_ADMIN.md         # Guia de uso do admin
 ```
 
-## 🎨 Cores do Site
+## 🚀 Como Usar
 
-Você pode mudar as cores editando o arquivo `css/style.css`:
+### Pré-requisitos
 
-```css
-:root {
-  --preto-profundo: #0a0a0a; /* Fundo principal */
-  --dourado-metalico: #d4af37; /* Cor de destaque */
-  --branco-cream: #f5f5f0; /* Texto principal */
+- Servidor web local (Python, PHP, Node.js, ou similar)
+- Navegador moderno (Chrome, Firefox, Safari, Edge)
+
+### Instalação e Execução
+
+1. **Clone ou baixe o projeto:**
+   ```bash
+   cd ~/projects
+   # Copie a pasta lulu-eventos aqui
+   ```
+
+2. **Inicie um servidor local:**
+
+   **Opção 1 - Python:**
+   ```bash
+   cd lulu-eventos
+   python3 -m http.server 8000
+   ```
+
+   **Opção 2 - PHP:**
+   ```bash
+   cd lulu-eventos
+   php -S localhost:8000
+   ```
+
+   **Opção 3 - Node.js:**
+   ```bash
+   cd lulu-eventos
+   npx http-server -p 8000
+   ```
+
+3. **Acesse no navegador:**
+   ```
+   http://localhost:8000
+   ```
+
+### Testando o Sistema
+
+Para verificar se tudo está funcionando:
+
+1. **Teste de Debug:**
+   ```
+   http://localhost:8000/test-debug.html
+   ```
+   Esta página mostra o status de todos os componentes.
+
+2. **Verifique cada página:**
+   - `index.html` - Deve carregar sem erros
+   - `galeria.html` - Deve mostrar as fotos
+   - `precos.html` - Deve mostrar os pacotes de preços
+   - `sobre.html` - Deve mostrar informações da empresa
+   - `contacto.html` - Formulário funcional
+
+## 📊 Sistema de Dados
+
+Todo o conteúdo dinâmico é armazenado em `data/content.json`:
+
+### Estrutura do JSON
+
+```json
+{
+  "meta": {
+    "versao": "1.0",
+    "ultimaAtualizacao": "2026-01-31",
+    "totalImagens": 12
+  },
+  "empresa": {
+    "nome": "Lulú Eventos",
+    "slogan": "Ornamentação para momentos especiais",
+    "telefone": "+258865771736",
+    "whatsapp": "258865771736",
+    "email": "contacto@lulueventos.com",
+    "facebook": "@ornamentacaolulu",
+    "instagram": "@ornamentacaolulu",
+    "endereco": "Moçambique"
+  },
+  "precos": {
+    "pacoteStandard": [
+      {"pessoas": 20, "valor": 9000, "moeda": "MT"},
+      {"pessoas": 30, "valor": 10500, "moeda": "MT"},
+      {"pessoas": 40, "valor": 12000, "moeda": "MT"},
+      {"pessoas": 50, "valor": 13500, "moeda": "MT"},
+      {"pessoas": 100, "valor": 22000, "moeda": "MT"},
+      {"pessoas": 150, "valor": 30000, "moeda": "MT"}
+    ],
+    "inclusoesPacote": [
+      "Mesa de honra",
+      "Painel de fotos",
+      "Mesa de buffet",
+      "Mesinha de bolo",
+      "Tapete vermelho",
+      "Transporte"
+    ]
+  },
+  "sobre": {
+    "titulo": "Sobre Nós",
+    "historia": "A Lulú Eventos nasceu da paixão...",
+    "missao": "Transformar seus sonhos em realidade..."
+  },
+  "galeria": [
+    {
+      "id": "uuid",
+      "filename": "img-timestamp.jpg",
+      "titulo": "Descrição da foto",
+      "ordem": 0
+    }
+  ]
 }
 ```
 
-## ✅ Checklist de Deploy
+## 🔧 Painel Administrativo
 
-- [ ] Editei as informações de contacto
-- [ ] Atualizei os preços
-- [ ] Adicionei fotos na galeria
-- [ ] Testei o site localmente (abri index.html no navegador)
-- [ ] Verifiquei se todos os links funcionam
-- [ ] Fiz upload na Netlify
-- [ ] Testei o site online
-- [ ] Compartilhei o link nas redes sociais!
+O sistema inclui um painel administrativo (`admin.html`) para gestão de conteúdo.
 
-## 🆘 Problemas Comuns
+### Funcionalidades do Admin
 
-### As imagens não aparecem
+- ✅ Gerenciar preços e inclusões
+- ✅ Editar textos (Sobre, História, Missão)
+- ✅ Upload de fotos da galeria
+- ✅ Reordenar imagens (↑↓)
+- ✅ Renomear e organizar fotos
+- ✅ Exportar tudo em ZIP para deploy
 
-- Verifique se os nomes dos arquivos estão corretos
-- Certifique-se de que as fotos estão nas pastas corretas
-- Extensões devem ser `.jpg`, `.jpeg`, `.png` ou `.webp`
+### Como Usar o Admin
 
-### Meu JSON deu erro
+1. **Acesse:**
+   ```
+   http://localhost:8000/admin.html
+   ```
 
-- Use um validador JSON online: [jsonlint.com](https://jsonlint.com)
-- Verifique vírgulas, aspas e chaves
-- Ou use o painel admin.html que faz isso automaticamente!
+2. **Escolha:**
+   - **Carregar Backup** - Se já tem um `content.json` anterior
+   - **Iniciar do Zero** - Para começar com dados padrão
 
-### O site não atualiza
+3. **Edite o conteúdo:**
+   - **Aba Preços** - Ajuste valores e inclusões
+   - **Aba Sobre** - Edite textos institucionais
+   - **Aba Galeria** - Adicione/remova/reordene fotos
 
-- Limpe o cache do navegador (Ctrl+Shift+Delete ou Cmd+Shift+Delete)
-- Na Netlify, force um novo deploy
-- Aguarde até 5 minutos para propagação
+4. **Exporte:**
+   - Clique em "Gerar Pacote ZIP"
+   - Baixe o arquivo `lulu-update-YYYY-MM-DD.zip`
 
-## 📱 Redes Sociais
+5. **Deploy:**
+   - Extraia o ZIP
+   - Copie `data/content.json` para o servidor
+   - Copie fotos de `assets/galeria/` para o servidor
 
-Não esqueça de atualizar seus perfis sociais:
+**Documentação completa:** `README_ADMIN.md`
 
-- Adicione o link do site na bio do Instagram
-- Fixe o link na página do Facebook
-- Compartilhe posts anunciando o novo site!
+## 📸 Gestão de Fotos
 
-## 💡 Dicas de Uso
+### Adicionar Fotos
 
-1. **Fotos de Qualidade:** Use fotos profissionais, bem iluminadas
-2. **Atualize Regularmente:** Adicione fotos de eventos recentes
-3. **Responda Rápido:** Configure notificações do WhatsApp Business
-4. **Google Sheets:** Ideal se você edita do celular frequentemente
-5. **Backup:** Sempre faça backup do `content.json` antes de editar
+1. Vá em `admin.html` → Aba "Galeria"
+2. Arraste fotos ou clique para selecionar
+3. Edite os títulos conforme necessário
+4. Use ↑↓ para reordenar
+5. Exporte o ZIP
 
-## 🔒 Segurança
+### Formato Recomendado
 
-- Não compartilhe seu painel admin publicamente
-- Mantenha backups dos arquivos importantes
-- Use senhas fortes na Netlify
+- **Formato:** JPG ou PNG
+- **Tamanho ideal:** 1200px de largura
+- **Peso:** 300-800 KB (use TinyPNG ou similar)
+- **Proporção:** Quadrada ou 4:3
 
-## 📈 Próximos Passos (Opcional)
+### Ferramentas de Otimização
 
-- [ ] Configurar domínio próprio (www.lulueventos.co.mz)
-- [ ] Adicionar Google Analytics
-- [ ] Configurar formulário de contacto com Netlify Forms
-- [ ] Adicionar mais idiomas (português e inglês)
-- [ ] Integrar com Instagram API para galeria automática
+- [TinyPNG](https://tinypng.com) - Compressão online
+- [iLoveIMG](https://iloveimg.com) - Redimensionar e otimizar
+- Photoshop/GIMP - Edição profissional
+
+## 🎨 Personalização
+
+### Cores
+
+Edite em `css/style.css`:
+
+```css
+:root {
+  --preto-profundo: #0a0a0a;
+  --dourado-metalico: #D4AF37;
+  --branco-cream: #f8f8f8;
+  --cinza-suave: #1a1a1a;
+}
+```
+
+### Fontes
+
+Atualmente usando:
+- **Display:** Playfair Display (serifada, elegante)
+- **Body:** Montserrat (sem serifa, moderna)
+
+Para alterar, edite as importações do Google Fonts nos arquivos HTML.
+
+### Layout
+
+- **Grid da Galeria:** `galeria.html` (linha ~14)
+- **Cards de Preço:** `precos.html` (linha ~13)
+- **Responsividade:** `css/style.css` (media queries no final)
+
+## 🔍 Troubleshooting
+
+### Problema: Fotos não aparecem na galeria
+
+**Solução:**
+```bash
+# Verificar se content.json tem galeria preenchida
+cat data/content.json | grep -A 5 '"galeria"'
+
+# Verificar se fotos existem
+ls -la assets/galeria/
+```
+
+### Problema: Preços não carregam
+
+**Solução:**
+1. Abrir Console do navegador (F12)
+2. Verificar erros em vermelho
+3. Testar manualmente:
+   ```javascript
+   carregarDados().then(d => console.log(d.precos));
+   ```
+
+### Problema: Servidor não inicia
+
+**Solução:**
+```bash
+# Verificar se porta está ocupada
+netstat -an | grep 8000
+
+# Usar porta diferente
+python3 -m http.server 8001
+```
+
+### Problema: Cache do navegador
+
+**Solução:**
+- Firefox/Chrome: `Ctrl + Shift + R`
+- Safari: `Cmd + Shift + R`
+- Ou limpar cache nas configurações
+
+## 📱 Compatibilidade
+
+### Navegadores Suportados
+
+- ✅ Chrome 90+
+- ✅ Firefox 88+
+- ✅ Safari 14+
+- ✅ Edge 90+
+- ✅ Mobile (iOS Safari, Chrome Mobile)
+
+### Recursos Utilizados
+
+- CSS Grid & Flexbox
+- ES6+ JavaScript
+- Fetch API
+- IntersectionObserver (lazy loading)
+- File API (admin)
+- Blob/ZIP (JSZip + FileSaver)
+
+## 📞 Informações de Contato
+
+**Lulú Eventos**
+- 📱 Telefone: +258 865771736
+- 📧 Email: contacto@lulueventos.com
+- 📘 Facebook: @ornamentacaolulu
+- 📸 Instagram: @ornamentacaolulu
+- 📍 Localização: Maputo, Moçambique
+
+## 🛠️ Stack Tecnológica
+
+- **Frontend:** HTML5, CSS3, JavaScript (Vanilla ES6+)
+- **Fontes:** Google Fonts (Playfair Display, Montserrat)
+- **Admin:** JSZip 3.10.1, FileSaver.js 2.0.5
+- **Servidor:** Qualquer servidor HTTP estático
+- **Dados:** JSON (sem banco de dados)
+
+## 📄 Licença
+
+© 2026 Lulú Eventos. Todos os direitos reservados.
+
+## 🔄 Workflow de Atualização
+
+### Para Atualizar Conteúdo
+
+1. **Admin edita** em `admin.html`
+2. **Exporta ZIP** com alterações
+3. **Envia ZIP** para técnico (WhatsApp, email, etc)
+4. **Técnico extrai** e substitui arquivos no servidor
+5. **Site atualiza** automaticamente
+
+### Para Atualizar Design/Código
+
+1. Editar arquivos HTML/CSS/JS localmente
+2. Testar em servidor local
+3. Fazer deploy manual para servidor de produção
+
+## 📚 Documentação Adicional
+
+- **README_ADMIN.md** - Guia completo do painel administrativo
+- **GUIA-TESTE.md** - Instruções de teste e troubleshooting
+- **test-debug.html** - Página de diagnóstico do sistema
+
+## 🚀 Roadmap Futuro
+
+### Funcionalidades Planejadas
+
+- [ ] Categorização de fotos (Casamentos, Aniversários, etc)
+- [ ] Sistema de depoimentos de clientes
+- [ ] Integração com Google Sheets (gestão não-técnica)
+- [ ] Formulário de orçamento funcional
+- [ ] Blog/Notícias
+- [ ] Multiidioma (PT-MZ / EN)
+- [ ] PWA (Progressive Web App)
+
+### Melhorias Técnicas
+
+- [ ] Compressão de imagens automática
+- [ ] Lazy loading de imagens otimizado
+- [ ] Cache Service Worker
+- [ ] Analytics (Google Analytics ou similar)
+- [ ] Sistema de backup automático
 
 ---
 
-## 🎉 Pronto!
+**Versão:** 1.0  
+**Última Atualização:** 31 de Janeiro de 2026  
+**Desenvolvido para:** Lulú Eventos, Moçambique
 
-Seu site está online e pronto para receber clientes!
+---
 
-**Desenvolvido com ❤️ para a Lulú Eventos**
+## 🆘 Suporte
 
-Para suporte ou dúvidas, consulte a documentação da Netlify ou entre em contacto com seu desenvolvedor.
+Para questões técnicas ou suporte, consulte:
+1. `test-debug.html` - Diagnóstico automático
+2. `GUIA-TESTE.md` - Troubleshooting detalhado
+3. Console do navegador (F12) - Logs de erro
+
+**Status Atual do Sistema:**
+- ✅ Galeria funcionando (12 fotos)
+- ✅ Admin funcionando (export ZIP)
+- ✅ Dados estruturados (content.json)
+- ⚠️ Preços em correção
+- ✅ Mobile responsivo
+- ✅ WhatsApp integrado

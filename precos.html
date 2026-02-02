@@ -91,9 +91,19 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       try {
+        console.log('🔄 Carregando preços...');
         const dados = await carregarDados();
+        console.log('📊 Dados recebidos:', dados);
+        
         const priceGrid = document.getElementById('priceGrid');
         const servicosList = document.getElementById('servicosList');
+        
+        if (!priceGrid || !servicosList) {
+          console.error('❌ Elementos não encontrados!');
+          return;
+        }
+        
+        console.log('💰 Renderizando', dados.precos.pacoteStandard.length, 'preços');
         
         priceGrid.innerHTML = dados.precos.pacoteStandard.map((p, i) => `
           <div class="price-card fade-in-up delay-${(i % 4) * 100}">
@@ -110,10 +120,19 @@
             <div><strong>${s}</strong></div>
           </div>
         `).join('');
+        
+        console.log('✅ Preços renderizados com sucesso!');
+        
       } catch (erro) {
-        console.error('Erro:', erro);
+        console.error('❌ Erro ao carregar preços:', erro);
       }
     });
   </script>
 </body>
 </html>
+  <style>
+    /* Forçar cards visíveis */
+    .price-card { opacity: 1 !important; }
+    .servico-item { opacity: 1 !important; }
+  </style>
+</head>

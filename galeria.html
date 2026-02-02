@@ -11,15 +11,120 @@
   <link rel="stylesheet" href="css/animations.css">
   <style>
     .gallery-hero { background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(42, 42, 42, 0.8)); padding: 10rem 0 6rem; text-align: center; margin-top: 70px; }
-    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 3rem; min-height: 200px; }
-    .gallery-item { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 1 / 1; background: #2a2a2a; border: 1px solid rgba(212, 175, 55, 0.2); }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .gallery-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(212, 175, 55, 0) 0%, rgba(212, 175, 55, 0.8) 100%); display: flex; align-items: flex-end; padding: 1.5rem; opacity: 0; transition: opacity 0.4s ease; z-index: 2; pointer-events: none; }
-    .gallery-item:hover .gallery-overlay { opacity: 1; }
-    .gallery-item:hover img { transform: scale(1.08); }
-    .gallery-category { color: #0a0a0a; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; text-transform: uppercase; }
-    @media (max-width: 768px) { .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; } .gallery-hero { padding: 8rem 0 4rem; } }
-  </style>
+    
+    /* Grid Responsiva: 3 colunas no desktop, 2 no mobile */
+    .gallery-grid { 
+        display: grid; 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 1.5rem; 
+        margin-top: 3rem; 
+    }
+
+    .gallery-item { 
+        position: relative; 
+        overflow: hidden; 
+        cursor: pointer; 
+        aspect-ratio: 1 / 1; 
+        background: #2a2a2a; 
+        border: 1px solid rgba(212, 175, 55, 0.2); 
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .gallery-item:hover img { transform: scale(1.1); }
+
+    /* Estilo do Lightbox Profissional */
+    .lightbox {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 2000;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        touch-action: none; /* Previne scroll da página no mobile */
+    }
+
+    .lightbox.active { display: flex; }
+
+    .lightbox-content {
+        position: relative;
+        width: 90%;
+        max-width: 1000px;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .lightbox-content img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease;
+    }
+
+    /* Navegação */
+    .lightbox-nav {
+        position: absolute;
+        top: 50%; width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+
+    .nav-btn {
+        width: 50px; height: 50px;
+        background: rgba(212, 175, 55, 0.2);
+        border: 1px solid var(--dourado-metalico);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        transition: 0.3s;
+    }
+
+    .nav-btn:hover { background: var(--dourado-metalico); }
+
+    .lightbox-close {
+        position: absolute;
+        top: -50px; right: 0;
+        color: white; font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .lightbox-caption {
+        color: var(--dourado-metalico);
+        margin-top: 20px;
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+    }
+
+    .lightbox-counter {
+        position: absolute;
+        top: 20px; color: white;
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
+
+    /* Responsividade Mobile */
+    @media (max-width: 768px) {
+        .gallery-grid { 
+            grid-template-columns: repeat(2, 1fr); /* FORÇA 2 COLUNAS */
+            gap: 0.8rem; 
+        }
+        .gallery-hero { padding: 6rem 0 3rem; }
+        .nav-btn { display: none; } /* Esconde setas no mobile para focar no Swipe */
+    }
+</style>
 </head>
 <body>
   <header class="header scrolled">
@@ -47,6 +152,7 @@
   <section style="padding: 4rem 0 6rem;">
     <div class="container">
       <div class="gallery-grid"></div>
+     
     </div>
   </section>
 

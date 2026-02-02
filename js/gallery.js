@@ -1,146 +1,131 @@
-// ============================================
-// LULÚ EVENTOS - GALERIA
-// Carrega fotos do content.json
-// ============================================
+let imagensGaleria = [];
+let currentIndex = 0;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  if (document.querySelector('.gallery-grid')) {
-    await carregarEExibirGaleria();
-    initLightbox();
-  }
+    if (document.querySelector('.gallery-grid')) {
+        await carregarEExibirGaleria();
+        setupLightbox();
+    }
 });
 
-/**
- * Carregar e exibir galeria
- */
 async function carregarEExibirGaleria() {
-  try {
-    console.log('🔄 Carregando galeria...');
-    const dados = await carregarDados();
-    console.log('📊 Dados recebidos:', dados);
-    
-    const galeria = dados.galeria || [];
-    console.log(`📷 Total de imagens: ${galeria.length}`);
-    
-    if (galeria.length === 0) {
-      console.warn('⚠️ Galeria vazia');
-      exibirMensagemVazia();
-      return;
+    try {
+        const dados = await carregarDados();
+        imagensGaleria = (dados.galeria || []).sort((a, b) => a.ordem - b.ordem);
+        
+        if (imagensGaleria.length === 0) {
+            exibirMensagemVazia();
+            return;
+        }
+        
+        const grid = document.querySelector('.gallery-grid');
+        grid.innerHTML = imagensGaleria.map((img, index) => `
+            <div class="gallery-item" onclick="openLightbox(${index})">
+                <img src="./assets/galeria/${img.filename}" 
+                     alt="${img.titulo || 'Evento Lulú'}" 
+                     loading="lazy">
+                <div class="gallery-overlay">
+                    <span class="gallery-category">${img.titulo || 'Ver Foto'}</span>
+                </div>
+            </div>
+        `).join('');
+        
+    } catch (erro) {
+        console.error('Erro:', erro);
     }
-    
-    console.log('🖼️ Renderizando galeria...');
-    renderizarGaleria(galeria);
-    console.log('✅ Galeria renderizada com sucesso');
-    
-  } catch (erro) {
-    console.error('❌ Erro ao carregar galeria:', erro);
-    exibirMensagemVazia();
-  }
 }
 
-/**
- * Renderizar galeria no DOM
- */
-function renderizarGaleria(imagens) {
-  const grid = document.querySelector('.gallery-grid');
-  
-  // Ordenar por campo 'ordem'
-  const imagensOrdenadas = [...imagens].sort((a, b) => a.ordem - b.ordem);
-  
-  grid.innerHTML = imagensOrdenadas.map(img => `
-    <div class="gallery-item fade-in-up" data-id="${img.id}" style="opacity: 1; transform: scale(1);">
-      <img src="./assets/galeria/${img.filename}" 
-           alt="${img.titulo || 'Evento Lulú'}" 
-           loading="lazy"
-           style="display: block; width: 100%; height: 100%; object-fit: cover;"
-           onerror="this.parentElement.style.display='none'; console.error('Erro ao carregar:', this.src);">
-      <div class="gallery-overlay">
-        <span class="gallery-category">${img.titulo || 'Galeria'}</span>
-      </div>
-    </div>
-  `).join('');
-  
-  console.log(`✅ ${imagensOrdenadas.length} imagens renderizadas na galeria`);
+// ====== LÓGICA DO LIGHTBOX COM SWIPE ======
+
+function setupLightbox() {
+    // Criar elemento se não existir
+    if (!document.getElementById('custom-lightbox')) {
+        const lb = document.createElement('div');
+        lb.id = 'custom-lightbox';
+        lb.className = 'lightbox';
+        lb.innerHTML = `
+            <div class="lightbox-counter"></div>
+            <div class="lightbox-content">
+                <span class="lightbox-close">&times;</span>
+                <img id="lightbox-img" src="" alt="">
+                <div class="lightbox-nav">
+                    <div class="nav-btn" onclick="changeImage(-1)">&#10094;</div>
+                    <div class="nav-btn" onclick="changeImage(1)">&#10095;</div>
+                </div>
+            </div>
+            <div class="lightbox-caption"></div>
+        `;
+        document.body.appendChild(lb);
+
+        // Eventos de fechar
+        lb.querySelector('.lightbox-close').onclick = closeLightbox;
+        lb.onclick = (e) => { if(e.target.id === 'custom-lightbox') closeLightbox(); };
+
+        // Suporte a Teclado
+        document.addEventListener('keydown', (e) => {
+            if (!lb.classList.contains('active')) return;
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowLeft") changeImage(-1);
+            if (e.key === "ArrowRight") changeImage(1);
+        });
+
+        // --- LÓGICA DE SWIPE (DESLIZAR) ---
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        lb.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        lb.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50; // pixels mínimos para considerar swipe
+            if (touchEndX < touchStartX - threshold) changeImage(1); // Deslizou para esquerda -> Próxima
+            if (touchEndX > touchStartX + threshold) changeImage(-1); // Deslizou para direita -> Anterior
+        }
+    }
 }
 
-/**
- * Exibir mensagem quando galeria vazia
- */
+function openLightbox(index) {
+    currentIndex = index;
+    updateLightboxContent();
+    document.getElementById('custom-lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+}
+
+function closeLightbox() {
+    document.getElementById('custom-lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function changeImage(step) {
+    currentIndex += step;
+    if (currentIndex >= imagensGaleria.length) currentIndex = 0;
+    if (currentIndex < 0) currentIndex = imagensGaleria.length - 1;
+    updateLightboxContent();
+}
+
+function updateLightboxContent() {
+    const imgData = imagensGaleria[currentIndex];
+    const lbImg = document.getElementById('lightbox-img');
+    const lbCaption = document.querySelector('.lightbox-caption');
+    const lbCounter = document.querySelector('.lightbox-counter');
+
+    // Efeito de fade simples ao trocar
+    lbImg.style.opacity = '0';
+    
+    setTimeout(() => {
+        lbImg.src = `./assets/galeria/${imgData.filename}`;
+        lbCaption.textContent = imgData.titulo || "";
+        lbCounter.textContent = `${currentIndex + 1} / ${imagensGaleria.length}`;
+        lbImg.style.opacity = '1';
+    }, 150);
+}
+
 function exibirMensagemVazia() {
-  const grid = document.querySelector('.gallery-grid');
-  grid.innerHTML = `
-    <div style="grid-column: 1/-1; text-align: center; padding: 4rem 2rem; opacity: 0.7;">
-      <div style="font-size: 4rem; margin-bottom: 1rem;">📸</div>
-      <h3>Galeria em actualização</h3>
-      <p style="margin-top: 0.5rem;">Em breve teremos fotos dos nossos eventos aqui!</p>
-    </div>
-  `;
+    document.querySelector('.gallery-grid').innerHTML = `<p class="text-center" style="grid-column: 1/-1;">Nenhuma imagem encontrada.</p>`;
 }
-
-// ====== LIGHTBOX ======
-
-/**
- * Inicializar lightbox
- */
-function initLightbox() {
-  let lightbox = document.querySelector('.lightbox');
-  
-  if (!lightbox) {
-    lightbox = criarLightbox();
-    document.body.appendChild(lightbox);
-  }
-  
-  const lightboxImg = lightbox.querySelector('.lightbox-content img');
-  const lightboxClose = lightbox.querySelector('.lightbox-close');
-  
-  // Abrir ao clicar
-  document.addEventListener('click', (e) => {
-    const galleryItem = e.target.closest('.gallery-item');
-    if (galleryItem) {
-      const img = galleryItem.querySelector('img');
-      if (img) {
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-  });
-  
-  // Fechar
-  lightboxClose.addEventListener('click', () => fecharLightbox(lightbox));
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) fecharLightbox(lightbox);
-  });
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-      fecharLightbox(lightbox);
-    }
-  });
-}
-
-/**
- * Criar elemento lightbox
- */
-function criarLightbox() {
-  const lightbox = document.createElement('div');
-  lightbox.className = 'lightbox';
-  lightbox.innerHTML = `
-    <div class="lightbox-content">
-      <button class="lightbox-close" aria-label="Fechar"></button>
-      <img src="" alt="">
-    </div>
-  `;
-  return lightbox;
-}
-
-/**
- * Fechar lightbox
- */
-function fecharLightbox(lightbox) {
-  lightbox.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-console.log('🖼️ Galeria inicializada');
