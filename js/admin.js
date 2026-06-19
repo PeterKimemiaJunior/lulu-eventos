@@ -28,61 +28,115 @@ let imagensParaRemover = []; // IDs marcados para exclusão
 let alteracoesNaoSalvas = false;
 
 // ====== INICIALIZAÇÃO ======
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('🎨 Admin inicializado');
   configurarEventos();
   configurarAlertaSaida();
+  
+  // Verify if we have a persisted session password
+  const savedPassword = sessionStorage.getItem('lulu_admin_password');
+  if (savedPassword) {
+    const success = await verificarCredenciais(savedPassword);
+    if (success) {
+      const overlay = document.getElementById('loginOverlay');
+      if (overlay) overlay.style.display = 'none';
+      await tentarCarregamentoAutomatico();
+      return;
+    }
+  }
+  
+  // Otherwise, ensure overlay is visible and ready
+  const overlay = document.getElementById('loginOverlay');
+  if (overlay) overlay.style.display = 'flex';
 });
 
 /**
- * Configurar todos os event listeners
+ * Verifica as credenciais junto do servidor
  */
-function configurarEventos() {
-  // Tela inicial
-  document.getElementById('carregarBackup').addEventListener('change', carregarBackup);
-  document.getElementById('iniciarVazio').addEventListener('click', iniciarVazio);
-  
-  // Tabs
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => trocarTab(btn.dataset.tab));
-  });
-  
-  // Upload de fotos
-  const uploadZone = document.getElementById('uploadZone');
-  const inputFotos = document.getElementById('inputFotos');
-  
-  uploadZone.addEventListener('click', () => inputFotos.click());
-  inputFotos.addEventListener('change', handleNovasFotos);
-  
-  uploadZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadZone.style.borderColor = '#D4AF37';
-  });
-  
-  uploadZone.addEventListener('dragleave', () => {
-    uploadZone.style.borderColor = '';
-  });
-  
-  uploadZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadZone.style.borderColor = '';
-    handleNovasFotos({ target: { files: e.dataTransfer.files } });
-  });
-  
-  // Botões principais
-  document.getElementById('btnExportar').addEventListener('click', exportarZIP);
-  document.getElementById('btnVisualizar').addEventListener('click', () => window.open('index.html', '_blank'));
-  document.getElementById('addInclusao').addEventListener('click', adicionarInclusao);
-  document.getElementById('modalFechar').addEventListener('click', fecharModal);
+async function verificarCredenciais(password) {
+  try {
+    const response = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    const data = await response.json();
+    return response.ok && data.success;
+  } catch (erro) {
+    console.error('Erro na verificação de credenciais:', erro);
+    return false;
+  }
 }
 
 /**
- * Carregar arquivo JSON de backup
+ * Tenta fazer login com a palavra-passe introduzida
  */
-function carregarBackup(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+async function tentarLogin() {
+  const passwordInput = document.getElementById('inputPassword');
+  const errorEl = document.getElementById('loginErro');
+  if (!passwordInput || !errorEl) return;
   
+  const password = passwordInput.value;
+  errorEl.textContent = '';
+  
+  try {
+    const response = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    });
+    
+    const data = await response.json();
+    if (response.ok && data.success) {
+      sessionStorage.setItem('lulu_admin_password', password);
+      const overlay = document.getElementById('loginOverlay');
+      if (overlay) overlay.style.display = 'none';
+      mostrarToast('Acesso autorizado com sucesso!', 'success');
+      await tentarCarregamentoAutomatico();
+    } else {
+      errorEl.textContent = data.error || 'Palavra-passe inválida.';
+    }
+  } catch (erro) {
+    errorEl.textContent = 'Erro ao conectar-se ao servidor.';
+    console.error(erro);
+  }
+}
+
+/**
+ * Tenta carregar automaticamente content.json do servidor
+ */
+async function tentarCarregamentoAutomatico() {
+  try {
+    let response;
+    try {
+      response = await fetch('/data/content.json');
+      if (!response.ok) {
+        throw new Error(`Erro HTTP no caminho absoluto: ${response.status}`);
+      }
+    } catch (e) {
+      console.warn('Erro ao carregar caminho absoluto do admin, tentando relativo...', e);
+      response = await fetch('./data/content.json');
+    }
+    
+    if (response.ok) {
+      const dados = await response.json();
+      estadoActual = dados;
+      imagensExistentes = [...dados.galeria];
+      iniciarInterface();
+      mostrarToast('Dados ativos do site carregados automaticamente!', 'success');
+    } else {
+      console.warn('Não foi possível carregar content.json automaticamente.');
+    }
+  } catch (erro) {
+    console.error('Erro no carregamento automático:', erro);
+  }
+}
+
+/**
+ * Importa e carrega dados de um arquivo backup File
+ */
+function handleBackupUpload(file) {
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
@@ -97,6 +151,75 @@ function carregarBackup(e) {
     }
   };
   reader.readAsText(file);
+}
+
+/**
+ * Configurar todos os event listeners
+ */
+function configurarEventos() {
+  // Tela inicial
+  document.getElementById('carregarBackup').addEventListener('change', carregarBackup);
+  document.getElementById('iniciarVazio').addEventListener('click', iniciarVazio);
+  
+  // Header Import Backup
+  const carregarBackupHeader = document.getElementById('carregarBackupHeader');
+  if (carregarBackupHeader) {
+    carregarBackupHeader.addEventListener('change', (e) => {
+      handleBackupUpload(e.target.files[0]);
+    });
+  }
+
+  // Novo Pacote de Preço button
+  const addPacotePrecoBtn = document.getElementById('addPacotePreco');
+  if (addPacotePrecoBtn) {
+    addPacotePrecoBtn.addEventListener('click', adicionarPacotePreco);
+  }
+  
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => trocarTab(btn.dataset.tab));
+  });
+  
+  // Upload de fotos
+  const uploadZone = document.getElementById('uploadZone');
+  const inputFotos = document.getElementById('inputFotos');
+  
+  if (uploadZone) {
+    uploadZone.addEventListener('click', () => inputFotos.click());
+    inputFotos.addEventListener('change', handleNovasFotos);
+    
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.style.borderColor = '#D4AF37';
+    });
+    
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.style.borderColor = '';
+    });
+    
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.style.borderColor = '';
+      handleNovasFotos({ target: { files: e.dataTransfer.files } });
+    });
+  }
+  
+  // Botões principais
+  const btnSalvarServidor = document.getElementById('btnSalvarServidor');
+  if (btnSalvarServidor) {
+    btnSalvarServidor.addEventListener('click', salvarNoServidor);
+  }
+  document.getElementById('btnExportar').addEventListener('click', exportarZIP);
+  document.getElementById('btnVisualizar').addEventListener('click', () => window.open('index.html', '_blank'));
+  document.getElementById('addInclusao').addEventListener('click', adicionarInclusao);
+  document.getElementById('modalFechar').addEventListener('click', fecharModal);
+}
+
+/**
+ * Carregar arquivo JSON de backup
+ */
+function carregarBackup(e) {
+  handleBackupUpload(e.target.files[0]);
 }
 
 /**
@@ -154,8 +277,10 @@ function iniciarVazio() {
  * Iniciar interface de edição
  */
 function iniciarInterface() {
-  document.getElementById('telaInicial').classList.add('hidden');
-  document.getElementById('areaEdicao').classList.remove('hidden');
+  const telaInicial = document.getElementById('telaInicial');
+  const areaEdicao = document.getElementById('areaEdicao');
+  if (telaInicial) telaInicial.classList.add('hidden');
+  if (areaEdicao) areaEdicao.classList.remove('hidden');
   
   renderizarPrecos();
   renderizarInclusoes();
@@ -171,33 +296,95 @@ function trocarTab(tabId) {
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
   
-  document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-  document.getElementById(tabId).classList.add('active');
+  const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+  const activeContent = document.getElementById(tabId);
+  if (activeContent) activeContent.classList.add('active');
 }
 
 // ====== RENDERIZAÇÃO ======
 
 /**
- * Renderizar formulário de preços
+ * Renderizar formulário de preços com suporte dinâmico para adição e remoção
  */
 function renderizarPrecos() {
   const container = document.getElementById('precosForm');
+  if (!container) return;
+  
+  if (!estadoActual.precos.pacoteStandard || estadoActual.precos.pacoteStandard.length === 0) {
+    container.innerHTML = `<p style="opacity: 0.6; margin-bottom: 1.5rem;">Nenhum pacote de preço cadastrado.</p>`;
+    return;
+  }
+  
   container.innerHTML = estadoActual.precos.pacoteStandard.map((item, index) => `
-    <div class="form-group">
-      <label>${item.pessoas} Pessoas</label>
-      <input type="number" value="${item.valor}" 
-             onchange="actualizarPreco(${index}, this.value)"
-             placeholder="Valor em MT">
+    <div class="form-group" style="display: flex; gap: 1rem; align-items: flex-end; background: #222; padding: 1rem; border-radius: 4px; border-left: 2px solid #D4AF37; margin-bottom: 1rem;">
+      <div style="flex: 2;">
+        <label style="font-size: 0.85rem; margin-bottom: 0.25rem; display: block; color: #D4AF37; font-weight: 600;">Nº de Pessoas (Capacidade)</label>
+        <input type="number" value="${item.pessoas}" 
+               onchange="actualizarPessoasPreco(${index}, this.value)"
+               placeholder="Qtd. Pessoas" min="1" style="width: 100%; padding: 0.5rem; background: #2a2a2a; border: 1px solid #3a3a3a; color: #f5f5f0; border-radius: 4px;">
+      </div>
+      <div style="flex: 3;">
+        <label style="font-size: 0.85rem; margin-bottom: 0.25rem; display: block; color: #D4AF37; font-weight: 600;">Valor do Pacote (MT)</label>
+        <input type="number" value="${item.valor}" 
+               onchange="actualizarValorPreco(${index}, this.value)"
+               placeholder="Preço em MT" style="width: 100%; padding: 0.5rem; background: #2a2a2a; border: 1px solid #3a3a3a; color: #f5f5f0; border-radius: 4px;">
+      </div>
+      <div style="flex-shrink: 0;">
+        <button class="btn btn-danger" onclick="removerPacotePreco(${index})" style="height: 38px; padding: 0 1rem; font-size: 0.9rem; font-weight: bold; margin-bottom: 0px;">
+          Excluir
+        </button>
+      </div>
     </div>
   `).join('');
 }
 
 /**
- * Actualizar preço
+ * Actualizar valor de preço
  */
-function actualizarPreco(index, valor) {
-  estadoActual.precos.pacoteStandard[index].valor = parseInt(valor);
+function actualizarValorPreco(index, valor) {
+  estadoActual.precos.pacoteStandard[index].valor = parseInt(valor) || 0;
   marcarAlteracoes();
+}
+
+/**
+ * Actualizar número de pessoas
+ */
+function actualizarPessoasPreco(index, pessoas) {
+  estadoActual.precos.pacoteStandard[index].pessoas = parseInt(pessoas) || 0;
+  marcarAlteracoes();
+}
+
+/**
+ * Remover um pacote de preços
+ */
+function removerPacotePreco(index) {
+  estadoActual.precos.pacoteStandard.splice(index, 1);
+  renderizarPrecos();
+  marcarAlteracoes();
+  mostrarToast('Pacote de preço removido!', 'success');
+}
+
+/**
+ * Adicionar novo pacote de preços
+ */
+function adicionarPacotePreco() {
+  if (!estadoActual.precos.pacoteStandard) {
+    estadoActual.precos.pacoteStandard = [];
+  }
+  const ultimoPacote = estadoActual.precos.pacoteStandard[estadoActual.precos.pacoteStandard.length - 1];
+  const novasPessoas = ultimoPacote ? ultimoPacote.pessoas + 10 : 20;
+  const novoValor = ultimoPacote ? ultimoPacote.valor + 1500 : 9000;
+  
+  estadoActual.precos.pacoteStandard.push({
+    pessoas: novasPessoas,
+    valor: novoValor,
+    moeda: "MT"
+  });
+  
+  renderizarPrecos();
+  marcarAlteracoes();
+  mostrarToast('Novo pacote de preço adicionado!', 'success');
 }
 
 /**
@@ -205,6 +392,7 @@ function actualizarPreco(index, valor) {
  */
 function renderizarInclusoes() {
   const container = document.getElementById('inclusoesForm');
+  if (!container) return;
   container.innerHTML = estadoActual.precos.inclusoesPacote.map((item, index) => `
     <div class="form-group" style="display: flex; gap: 0.5rem; align-items: center;">
       <input type="text" value="${item}" 
@@ -245,18 +433,24 @@ function adicionarInclusao() {
  * Renderizar formulário sobre
  */
 function renderizarSobre() {
-  document.getElementById('historia').value = estadoActual.sobre.historia || '';
-  document.getElementById('missao').value = estadoActual.sobre.missao || '';
+  const historiaEl = document.getElementById('historia');
+  const missaoEl = document.getElementById('missao');
   
-  document.getElementById('historia').addEventListener('input', (e) => {
-    estadoActual.sobre.historia = e.target.value;
-    marcarAlteracoes();
-  });
+  if (historiaEl) {
+    historiaEl.value = estadoActual.sobre.historia || '';
+    historiaEl.addEventListener('input', (e) => {
+      estadoActual.sobre.historia = e.target.value;
+      marcarAlteracoes();
+    });
+  }
   
-  document.getElementById('missao').addEventListener('input', (e) => {
-    estadoActual.sobre.missao = e.target.value;
-    marcarAlteracoes();
-  });
+  if (missaoEl) {
+    missaoEl.value = estadoActual.sobre.missao || '';
+    missaoEl.addEventListener('input', (e) => {
+      estadoActual.sobre.missao = e.target.value;
+      marcarAlteracoes();
+    });
+  }
 }
 
 /**
@@ -264,6 +458,7 @@ function renderizarSobre() {
  */
 function renderizarGaleria() {
   const container = document.getElementById('galeriaGrid');
+  if (!container) return;
   
   // Imagens existentes
   const htmlExistentes = imagensExistentes
@@ -397,6 +592,120 @@ function moverImagem(index, direcao) {
   marcarAlteracoes();
 }
 
+// ====== SALVAMENTO NO SERVIDOR (AUTOMATIZADO) ======
+
+/**
+ * Salva todas as alterações de JSON e imagens directamente no servidor e publica
+ */
+async function salvarNoServidor() {
+  const totalImagens = imagensExistentes.filter(img => !imagensParaRemover.includes(img.id)).length + novasImagens.length;
+  
+  if (totalImagens === 0) {
+    mostrarModal('Erro', 'A galeria não pode ficar vazia. Adicione pelo menos uma foto.');
+    return;
+  }
+  
+  mostrarToast('A enviar e a publicar alterações...', 'info');
+  
+  try {
+    // 1. Preparar galeria final
+    const galeriaFinal = [];
+    
+    // Adicionar imagens existentes (não removidas)
+    imagensExistentes
+      .filter(img => !imagensParaRemover.includes(img.id))
+      .forEach((img, index) => {
+        img.ordem = index;
+        galeriaFinal.push({
+          id: img.id,
+          filename: img.filename,
+          titulo: img.titulo,
+          ordem: img.ordem
+        });
+      });
+    
+    // 2. Converter novas imagens para Base64 no envio
+    const novasImagensPayload = [];
+    for (let i = 0; i < novasImagens.length; i++) {
+      const nova = novasImagens[i];
+      const base64 = await fileToBase64(nova.file);
+      novasImagensPayload.push({
+        filename: nova.filename,
+        base64: base64
+      });
+      
+      galeriaFinal.push({
+        id: nova.id,
+        filename: nova.filename,
+        titulo: nova.titulo,
+        ordem: imagensExistentes.length + i
+      });
+    }
+    
+    // 3. Actualizar meta estado
+    estadoActual.meta.totalImagens = galeriaFinal.length;
+    estadoActual.meta.ultimaAtualizacao = new Date().toISOString().split('T')[0];
+    estadoActual.galeria = galeriaFinal;
+    
+    // 4. Preparar lista de imagens físicas para apagar
+    const deleteImages = [...imagensParaRemover].map(id => {
+      const img = imagensExistentes.find(i => i.id === id);
+      return img ? img.filename : null;
+    }).filter(Boolean);
+    
+    // 5. Enviar POST ao servidor
+    const password = sessionStorage.getItem('lulu_admin_password') || '';
+    const response = await fetch('/api/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Password': password
+      },
+      body: JSON.stringify({
+        content: estadoActual,
+        images: novasImagensPayload,
+        deleteImages: deleteImages
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Erro HTTP ${response.status}`);
+    }
+    
+    const result = await response.json();
+    
+    // Sucesso! Atualizar estado local
+    imagensExistentes = [...galeriaFinal];
+    novasImagens = [];
+    imagensParaRemover = [];
+    
+    alteracoesNaoSalvas = false;
+    
+    renderizarGaleria();
+    mostrarModal('Sucesso!', 'Todas as alterações de conteúdo e imagens foram salvas e publicadas automaticamente no site!');
+    
+  } catch (erro) {
+    console.error('Erro ao salvar no servidor:', erro);
+    mostrarModal('Erro ao Salvar', `Não foi possível guardar no servidor: ${erro.message}`);
+  }
+}
+
+/**
+ * Auxiliar para converter ficheiro para Base64 encodado
+ */
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const content = reader.result.split(',')[1];
+      resolve(content);
+    };
+    reader.onerror = error => reject(error);
+  });
+}
+
 // ====== EXPORTAÇÃO ZIP ======
 
 /**
@@ -404,7 +713,7 @@ function moverImagem(index, direcao) {
  */
 async function exportarZIP() {
   // Validar galeria
-  const totalImagens = imagensExistentes.filter(i => !imagensParaRemover.includes(i.id)).length + novasImagens.length;
+  const totalImagens = imagensExistentes.filter(img => !imagensParaRemover.includes(img.id)).length + novasImagens.length;
   
   if (totalImagens === 0) {
     mostrarModal('Erro', 'A galeria não pode ficar vazia. Adicione pelo menos uma foto.');
@@ -477,12 +786,16 @@ async function exportarZIP() {
  * Actualizar estatísticas
  */
 function actualizarEstatisticas() {
-  const totalExistentes = imagensExistentes.filter(i => !imagensParaRemover.includes(i.id)).length;
+  const totalExistentes = imagensExistentes.filter(img => !imagensParaRemover.includes(img.id)).length;
   const total = totalExistentes + novasImagens.length;
   
-  document.getElementById('statImagens').textContent = total;
-  document.getElementById('statNovas').textContent = novasImagens.length;
-  document.getElementById('statRemover').textContent = imagensParaRemover.length;
+  const totalEl = document.getElementById('statImagens');
+  const novasEl = document.getElementById('statNovas');
+  const removerEl = document.getElementById('statRemover');
+  
+  if (totalEl) totalEl.textContent = total;
+  if (novasEl) novasEl.textContent = novasImagens.length;
+  if (removerEl) removerEl.textContent = imagensParaRemover.length;
 }
 
 /**
@@ -524,6 +837,7 @@ function gerarUUID() {
  */
 function mostrarToast(mensagem, tipo = 'success') {
   const toast = document.getElementById('toast');
+  if (!toast) return;
   toast.textContent = mensagem;
   toast.className = `toast ${tipo}`;
   toast.classList.add('show');
@@ -537,20 +851,30 @@ function mostrarToast(mensagem, tipo = 'success') {
  * Mostrar modal
  */
 function mostrarModal(titulo, mensagem) {
-  document.getElementById('modalTitulo').textContent = titulo;
-  document.getElementById('modalMensagem').textContent = mensagem;
-  document.getElementById('modal').classList.add('show');
+  const modalTitulo = document.getElementById('modalTitulo');
+  const modalMsg = document.getElementById('modalMensagem');
+  const modal = document.getElementById('modal');
+  
+  if (modalTitulo) modalTitulo.textContent = titulo;
+  if (modalMsg) modalMsg.textContent = mensagem;
+  if (modal) modal.classList.add('show');
 }
 
 /**
  * Fechar modal
  */
 function fecharModal() {
-  document.getElementById('modal').classList.remove('show');
+  const modal = document.getElementById('modal');
+  if (modal) modal.classList.remove('show');
 }
 
 // Exportar funções globalmente para uso nos event handlers inline
-window.actualizarPreco = actualizarPreco;
+window.actualizarValorPreco = actualizarValorPreco;
+window.actualizarPessoasPreco = actualizarPessoasPreco;
+window.removerPacotePreco = removerPacotePreco;
+window.adicionarPacotePreco = adicionarPacotePreco;
+window.handleBackupUpload = handleBackupUpload;
+window.salvarNoServidor = salvarNoServidor;
 window.actualizarInclusao = actualizarInclusao;
 window.removerInclusao = removerInclusao;
 window.actualizarTitulo = actualizarTitulo;
@@ -558,5 +882,7 @@ window.actualizarTituloNova = actualizarTituloNova;
 window.marcarParaRemover = marcarParaRemover;
 window.removerNova = removerNova;
 window.moverImagem = moverImagem;
+window.tentarLogin = tentarLogin;
+window.verificarCredenciais = verificarCredenciais;
 
 console.log('✅ Admin carregado');

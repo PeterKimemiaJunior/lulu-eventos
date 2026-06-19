@@ -1,0 +1,6 @@
+{
+  "name": "Lulú Eventos",
+  "description": "Website oficial da Lulú Eventos - Decoração de eventos de luxo em Moçambique com painel de administração offline.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -56,10 +56,35 @@
   </style>
 </head>
 <body>
-  <header class="admin-header">
-    <h1>🎨 Painel de Administração</h1>
-    <p>Lulú Eventos - Gestão de Conteúdo</p>
+  <header class="admin-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1>🎨 Painel de Administração</h1>
+      <p>Lulú Eventos - Gestão de Conteúdo</p>
+    </div>
+    <div style="display: flex; gap: 0.5rem;" class="import-backup-container">
+      <label for="carregarBackupHeader" class="btn btn-secondary" style="cursor: pointer; padding: 0.6rem 1.2rem; font-size: 0.9rem;">
+        📁 Importar Backup JSON
+        <input type="file" id="carregarBackupHeader" accept=".json" style="display: none;">
+      </label>
+    </div>
   </header>
+
+  <!-- Login Access Security Barrier overlay -->
+  <div id="loginOverlay" class="inicial-screen" style="z-index: 10000; background: #0a0a0a; position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; padding: 1.5rem;">
+    <div style="background: #1a1a1a; border: 2px solid #D4AF37; padding: 2.5rem; border-radius: 8px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">🔐</div>
+      <h2 style="color: #D4AF37; font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">Acesso Restrito</h2>
+      <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 2rem;">Introduza a palavra-passe de administrador para poder editar o conteúdo do site.</p>
+      
+      <form id="loginForm" onsubmit="event.preventDefault(); tentarLogin();">
+        <div class="form-group" style="margin-bottom: 1.5rem; text-align: left;">
+          <input type="password" id="inputPassword" placeholder="Palavra-passe" required style="width: 100%; padding: 0.9rem; background: #2a2a2a; border: 1px solid #3a3a3a; color: #f5f5f0; border-radius: 4px; font-size: 1rem;">
+        </div>
+        <button type="submit" class="btn" style="width: 100%; font-size: 1rem; padding: 0.9rem;">Entrar no Painel</button>
+      </form>
+      <div id="loginErro" style="color: #e74c3c; font-size: 0.9rem; font-weight: 600; margin-top: 1rem; min-height: 1.25rem;"></div>
+    </div>
+  </div>
 
   <div id="telaInicial" class="inicial-screen">
     <div><h2>Bem-vindo ao Painel Admin</h2></div>
@@ -89,7 +114,8 @@
       <div id="tab-precos" class="tab-content active">
         <div class="admin-section">
           <h2>Preços - Pacote Standard</h2>
-          <div id="precosForm"></div>
+          <div id="precosForm" style="margin-bottom: 1rem;"></div>
+          <button id="addPacotePreco" class="btn btn-success">+ Adicionar Pacote de Preço</button>
         </div>
         <div class="admin-section">
           <h2>Inclusões do Pacote</h2>
@@ -120,8 +146,9 @@
 
       <div style="position: sticky; bottom: 0; background: #0a0a0a; padding: 1.5rem 0; border-top: 2px solid #3a3a3a; margin-top: 3rem;">
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button id="btnExportar" class="btn btn-large">💾 Gerar Pacote ZIP</button>
-          <button id="btnVisualizar" class="btn btn-secondary btn-large">👁️ Ver Site</button>
+          <button id="btnSalvarServidor" class="btn btn-large" style="background: #27ae60; color: white;">🚀 Publicar Alterações (Salvar no Servidor)</button>
+          <button id="btnExportar" class="btn btn-secondary btn-large">📥 Baixar Backup ZIP</button>
+          <button id="btnVisualizar" class="btn btn-secondary btn-large" style="background: #D4AF37; color: #0a0a0a;">👁️ Ver Site</button>
         </div>
       </div>
     </div>

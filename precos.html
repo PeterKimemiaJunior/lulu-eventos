@@ -18,6 +18,10 @@
     .price-value { font-size: 3rem; font-family: var(--font-display); color: var(--dourado-metalico); font-weight: 700; }
     .servico-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--cinza-suave); margin-bottom: 0.5rem; }
     @media (max-width: 768px) { .price-grid { grid-template-columns: 1fr; } }
+    
+    /* Forçar cards visíveis */
+    .price-card { opacity: 1 !important; }
+    .servico-item { opacity: 1 !important; }
   </style>
 </head>
 <body>
@@ -130,9 +134,3 @@
   </script>
 </body>
 </html>
-  <style>
-    /* Forçar cards visíveis */
-    .price-card { opacity: 1 !important; }
-    .servico-item { opacity: 1 !important; }
-  </style>
-</head>

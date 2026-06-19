@@ -16,7 +16,17 @@ async function carregarDados() {
   }
 
   try {
-    const response = await fetch('./data/content.json');
+    // Try absolute path first for maximum reliability in subpaths, fallback to relative path
+    let response;
+    try {
+      response = await fetch('/data/content.json');
+      if (!response.ok) {
+        throw new Error(`Erro HTTP no caminho absoluto: ${response.status}`);
+      }
+    } catch (e) {
+      console.warn('Erro ao carregar caminho absoluto, tentando caminho relativo...', e);
+      response = await fetch('./data/content.json');
+    }
     
     if (!response.ok) {
       throw new Error(`Erro HTTP: ${response.status}`);
@@ -41,7 +51,7 @@ async function carregarDados() {
         slogan: "Ornamentação para momentos especiais",
         telefone: "+258865771736",
         whatsapp: "258865771736",
-        email: "contacto@lulueventos.com",
+        email: "contato@lulueventos.co.mz",
         facebook: "@ornamentacaolulu",
         instagram: "@ornamentacaolulu",
         endereco: "Moçambique"
@@ -49,20 +59,25 @@ async function carregarDados() {
       precos: {
         pacoteStandard: [
           {"pessoas": 20, "valor": 9000, "moeda": "MT"},
+          {"pessoas": 30, "valor": 10500, "moeda": "MT"},
+          {"pessoas": 40, "valor": 12000, "moeda": "MT"},
           {"pessoas": 50, "valor": 13500, "moeda": "MT"},
-          {"pessoas": 100, "valor": 22000, "moeda": "MT"}
+          {"pessoas": 100, "valor": 22000, "moeda": "MT"},
+          {"pessoas": 150, "valor": 30000, "moeda": "MT"}
         ],
         inclusoesPacote: [
           "Mesa de honra",
           "Painel de fotos",
           "Mesa de buffet",
+          "Mesinha de bolo",
+          "Tapete vermelho",
           "Transporte"
         ]
       },
       sobre: {
         titulo: "Sobre Nós",
-        historia: "Especialistas em decoração de eventos.",
-        missao: "Transformar seus sonhos em realidade."
+        historia: "A Lulú Eventos nasceu da paixão por criar momentos inesquecíveis.",
+        missao: "Transformar seus sonhos em realidade com elegância e sofisticação."
       },
       galeria: []
     };
@@ -111,5 +126,6 @@ window.carregarDados = carregarDados;
 window.formatarPreco = formatarPreco;
 window.criarLinkWhatsApp = criarLinkWhatsApp;
 window.abrirWhatsApp = abrirWhatsApp;
+window.openWhatsApp = abrirWhatsApp; // Alias para compatibilidade retroativa e prevenção de bugs em eventos inline
 
 console.log('📊 Sistema de dados inicializado');

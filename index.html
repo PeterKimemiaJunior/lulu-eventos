@@ -95,7 +95,7 @@
         <h1 class="fade-in-up" style="margin-bottom: 1.5rem; text-shadow: 2px 4px 20px rgba(0,0,0,0.8);">
           Transformamos <span class="texto-dourado">Sonhos</span> em Realidade
         </h1>
-        <p class="fade-in-up delay-100" style="font-size: 1.3rem; margin-bottom: 2.5rem; text-shadow: 1px 2px 10px rgba(0,0,0,0.8);">
+        <p id="hero-slogan" class="fade-in-up delay-100" style="font-size: 1.3rem; margin-bottom: 2.5rem; text-shadow: 1px 2px 10px rgba(0,0,0,0.8);">
           Decoração de eventos de luxo com elegância e sofisticação
         </p>
         <div class="fade-in-up delay-200" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
@@ -199,7 +199,33 @@
       </div>
       
       <div id="testimonials" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem;">
-        <!-- Depoimentos serão carregados via JavaScript -->
+        <!-- Depoimentos serão carregados os depoimentos nos scripts dinâmicos -->
+        <div class="testimonial-card fade-in-up">
+          <p class="testimonial-text">O casamento dos meus sonhos foi realizado perfeitamente pela Lulú Eventos. Tudo estava luxuoso e brilhante!</p>
+          <div class="testimonial-author">
+            <span>Amélia Mabunda</span>
+          </div>
+          <div class="testimonial-event">Casamento em Maputo</div>
+          <div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
+        
+        <div class="testimonial-card fade-in-up delay-100">
+          <p class="testimonial-text">Ótimo profissionalismo! A decoração do nosso evento corporativo impressionou toda a diretoria e convidados.</p>
+          <div class="testimonial-author">
+            <span>Carlos Mondlane</span>
+          </div>
+          <div class="testimonial-event">Evento da Empresa CFM</div>
+          <div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
+        
+        <div class="testimonial-card fade-in-up delay-200">
+          <p class="testimonial-text">As fotos da festa de 15 anos da minha filha ficaram incríveis com o painel de fotos ornamentado que nos prepararam.</p>
+          <div class="testimonial-author">
+            <span>Soraia Tembe</span>
+          </div>
+          <div class="testimonial-event">Aniversário de 15 Anos</div>
+          <div class="rating"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+        </div>
       </div>
     </div>
   </section>
@@ -233,17 +259,17 @@
         <div class="footer-section">
           <h3>Lulú Eventos</h3>
           <p>Transformamos sonhos em realidade com elegância e sofisticação.</p>
-      <div class="footer-social-container">
-        <a href="https://facebook.com/ornamentacaolulu" target="_blank" class="luxury-social-link">
-            <i class="fa-brands fa-facebook-f"></i>
-            <span>@ornamentacaolulu</span>
-        </a>
-        
-        <a href="https://instagram.com/ornamentacaolulu" target="_blank" class="luxury-social-link">
-            <i class="fa-brands fa-instagram"></i>
-            <span>@ornamentacaolulu</span>
-        </a>
-    </div>
+          <div class="footer-social-container">
+            <a href="https://facebook.com/ornamentacaolulu" target="_blank" class="luxury-social-link">
+                <i class="fa-brands fa-facebook-f"></i>
+                <span>@ornamentacaolulu</span>
+            </a>
+            
+            <a href="https://instagram.com/ornamentacaolulu" target="_blank" class="luxury-social-link">
+                <i class="fa-brands fa-instagram"></i>
+                <span>@ornamentacaolulu</span>
+            </a>
+          </div>
         </div>
         
         <div class="footer-section">
@@ -258,7 +284,7 @@
         <div class="footer-section">
           <h3>Contacto</h3>
           <a href="tel:+258865771736" data-contact="phone">+258 865771736</a>
-          <a href="/cdn-cgi/l/email-protection#41222e2f3520352e012d342d342437242f352e326f222e6f2c3b" data-contact="email"><span class="__cf_email__" data-cfemail="e1828e8f9580958ea18d948d948497848f958e92cf828ecf8c9b">[email&#160;protected]</span></a>
+          <a href="mailto:contato@lulueventos.co.mz" data-contact="email"><span class="__cf_email__">contato@lulueventos.co.mz</span></a>
           <p style="margin-top: 1rem;">Maputo, Moçambique</p>
         </div>
         
@@ -268,24 +294,125 @@
         <p>&copy; 2026 Lulú Eventos. Todos os direitos reservados.</p>
       </div>
     </div>
+  </footer>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
   
   <script>
-    // Script específico da página inicial
+    // Script específico da página inicial com Slideshow de altíssima performance e sincronização de dados
     document.addEventListener('DOMContentLoaded', async () => {
-      // Iniciar slideshow do hero (simples)
-      initHeroSlideshow();
+      await initHeroSlideshow();
     });
 
-    // Slideshow do Hero (simplificado - sem imagens hardcoded)
-    function initHeroSlideshow() {
+    // Iniciliza o carrossel do Hero dinamicamente com as melhores imagens da galeria real
+    async function initHeroSlideshow() {
       const slideshow = document.getElementById('heroSlideshow');
       if (!slideshow) return;
-      
-      // Apenas mantém o placeholder por enquanto
-      // As imagens virão da galeria depois que o admin adicionar
-      console.log('Hero slideshow inicializado');
+
+      try {
+        const dados = await carregarDados();
+        
+        // Carrega o slogan dinamicamente também
+        const sloganEl = document.getElementById('hero-slogan');
+        if (sloganEl && dados.empresa && dados.empresa.slogan) {
+          sloganEl.textContent = dados.empresa.slogan;
+        }
+
+        // Selecionar até 8 fotos mais recentes da galeria para o slideshow do topo
+        const fotos = dados.galeria || [];
+
+        if (fotos.length > 0) {
+          // Limpa o placeholder padrão
+          slideshow.innerHTML = '';
+          
+          let slideshowInterval = null;
+          let activeIndex = 0;
+
+          function startInterval() {
+            if (slideshowInterval) clearInterval(slideshowInterval);
+            const slides = slideshow.querySelectorAll('.hero-slide');
+            if (slides.length <= 1) return; // Não roda se houver apenas 1
+            
+            // Garante consistência de qual slide está ativo
+            let activeFound = false;
+            slides.forEach((s, idx) => {
+              if (s.classList.contains('active')) {
+                activeFound = true;
+                activeIndex = idx;
+              }
+            });
+            if (!activeFound) {
+              slides[0].classList.add('active');
+              activeIndex = 0;
+            }
+
+            slideshowInterval = setInterval(() => {
+              const currentSlides = slideshow.querySelectorAll('.hero-slide');
+              if (currentSlides.length <= 1) {
+                if (slideshowInterval) clearInterval(slideshowInterval);
+                return;
+              }
+              currentSlides[activeIndex].classList.remove('active');
+              activeIndex = (activeIndex + 1) % currentSlides.length;
+              currentSlides[activeIndex].classList.add('active');
+            }, 6000); // 6 segundos de transição elegante
+          }
+
+          // Carrega as imagens de forma assíncrona, filtrando as que realmente existem física no disco
+          fotos.forEach((foto, idx) => {
+            const slide = document.createElement('div');
+            slide.className = 'hero-slide';
+            
+            const img = document.createElement('img');
+            img.alt = foto.titulo || 'Lulú Eventos';
+            img.loading = idx < 2 ? 'eager' : 'lazy'; // Otimização de LCP (Largest Contentful Paint)
+            
+            img.onload = () => {
+              slide.appendChild(img);
+              slideshow.appendChild(slide);
+              
+              // Se for a primeira imagem real de sucesso, ativa-a imediatamente
+              const slidesNow = slideshow.querySelectorAll('.hero-slide');
+              if (slidesNow.length === 1) {
+                slide.classList.add('active');
+              }
+              
+              startInterval();
+            };
+            
+            img.onerror = () => {
+              // Se a imagem não existir no disco (ex.: removida ou falha de upload), limpa o elemento silenciosamente
+              console.warn(`[Slideshow] Imagem não encontrada fisicamente, pulando: ${foto.filename}`);
+              slide.remove();
+            };
+
+            img.src = `./assets/galeria/${foto.filename}`;
+          });
+
+          // Timeout de segurança: Se nenhuma imagem carregar em 2 segundos, garante fallback visual magnífico
+          setTimeout(() => {
+            const finalSlides = slideshow.querySelectorAll('.hero-slide');
+            if (finalSlides.length === 0) {
+              slideshow.innerHTML = `
+                <div class="hero-slide active" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);">
+                  <div style="position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0.15; background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 24px 24px;"></div>
+                </div>
+              `;
+            }
+          }, 2000);
+
+        } else {
+          // Fallback elegante se a galeria estiver vazia, garantindo visual luxuoso com preto/dourado
+          slideshow.innerHTML = `
+            <div class="hero-slide active" style="background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);">
+              <div style="position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0.15; background-image: radial-gradient(#D4AF37 1px, transparent 1px); background-size: 24px 24px;"></div>
+            </div>
+          `;
+          console.log('Galeria vazia, utilizando fallback estético em dourado e preto');
+        }
+      } catch (err) {
+        console.error('Erro ao inicializar o slideshow do hero:', err);
+      }
     }
   </script>
 </body>

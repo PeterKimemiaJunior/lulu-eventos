@@ -97,7 +97,7 @@
           <ul>
             ${precos.map(p => `<li>${p.pessoas} pessoas: ${formatarPreco(p.valor)}</li>`).join('')}
           </ul>
-          <p><strong>Inclusões:</strong></p>
+          <p><strong>Inclusões (Inclusões do Pacote):</strong></p>
           <ul>
             ${dados.precos.inclusoesPacote.map(inc => `<li>${inc}</li>`).join('')}
           </ul>
@@ -131,7 +131,7 @@
             <div>
               <img src="./assets/galeria/${img.filename}" 
                    alt="${img.titulo}"
-                   onerror="this.parentElement.innerHTML='<p class=error>❌ Erro ao carregar</p><p>${img.filename}</p>'">
+                   onerror="this.parentElement.innerHTML='<p class=error>❌ Erro </p><p>${img.filename}</p>'">
               <p style="font-size: 0.8rem; margin-top: 0.5rem;">${img.titulo}</p>
             </div>
           `).join('');
