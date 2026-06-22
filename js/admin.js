@@ -27,6 +27,11 @@ let novasImagens = []; // Arquivos File de fotos novas
 let imagensParaRemover = []; // IDs marcados para exclusão
 let alteracoesNaoSalvas = false;
 
+// Senha de fallback para autenticação client-side (quando não há servidor Express)
+// Em produção estática (Vercel), a API /api/auth não existe, então usamos esta verificação local.
+const FALLBACK_ADMIN_PASSWORD = 'LuluAdmin2026!';
+let isStaticHosting = false; // Detectado automaticamente quando /api/auth falha
+
 // ====== INICIALIZAÇÃO ======
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('🎨 Admin inicializado');
@@ -51,7 +56,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Verifica as credenciais junto do servidor
+ * Verifica as credenciais junto do servidor.
+ * Se o servidor não estiver disponível (hospedagem estática como Vercel),
+ * faz fallback para verificação client-side.
  */
 async function verificarCredenciais(password) {
   try {
@@ -63,13 +70,16 @@ async function verificarCredenciais(password) {
     const data = await response.json();
     return response.ok && data.success;
   } catch (erro) {
-    console.error('Erro na verificação de credenciais:', erro);
-    return false;
+    console.warn('[Auth] Servidor não disponível, usando autenticação local (modo estático).');
+    isStaticHosting = true;
+    // Fallback client-side: verifica contra a senha de fallback
+    return password === FALLBACK_ADMIN_PASSWORD;
   }
 }
 
 /**
- * Tenta fazer login com a palavra-passe introduzida
+ * Tenta fazer login com a palavra-passe introduzida.
+ * Suporta modo servidor (Express local) e modo estático (Vercel).
  */
 async function tentarLogin() {
   const passwordInput = document.getElementById('inputPassword');
@@ -77,6 +87,10 @@ async function tentarLogin() {
   if (!passwordInput || !errorEl) return;
   
   const password = passwordInput.value;
+  if (!password) {
+    errorEl.textContent = 'Por favor, introduza a palavra-passe.';
+    return;
+  }
   errorEl.textContent = '';
   
   try {
@@ -97,8 +111,19 @@ async function tentarLogin() {
       errorEl.textContent = data.error || 'Palavra-passe inválida.';
     }
   } catch (erro) {
-    errorEl.textContent = 'Erro ao conectar-se ao servidor.';
-    console.error(erro);
+    // Servidor não disponível (modo estático / Vercel)
+    console.warn('[Auth] Servidor não acessível, usando autenticação local.');
+    isStaticHosting = true;
+    
+    if (password === FALLBACK_ADMIN_PASSWORD) {
+      sessionStorage.setItem('lulu_admin_password', password);
+      const overlay = document.getElementById('loginOverlay');
+      if (overlay) overlay.style.display = 'none';
+      mostrarToast('Acesso autorizado (modo offline)!', 'success');
+      await tentarCarregamentoAutomatico();
+    } else {
+      errorEl.textContent = 'Palavra-passe incorreta. Acesso não autorizado.';
+    }
   }
 }
 
@@ -595,9 +620,19 @@ function moverImagem(index, direcao) {
 // ====== SALVAMENTO NO SERVIDOR (AUTOMATIZADO) ======
 
 /**
- * Salva todas as alterações de JSON e imagens directamente no servidor e publica
+ * Salva todas as alterações de JSON e imagens directamente no servidor e publica.
+ * Em modo estático (Vercel), redireciona para exportação ZIP.
  */
 async function salvarNoServidor() {
+  // Em modo estático (Vercel), o servidor Express não está disponível
+  if (isStaticHosting) {
+    mostrarModal(
+      'Modo Estático Detectado',
+      'O site está hospedado de forma estática (Vercel). Para publicar alterações, use o botão "Baixar Backup ZIP" para exportar as mudanças, e depois faça commit e push do conteúdo actualizado para o repositório Git.'
+    );
+    return;
+  }
+
   const totalImagens = imagensExistentes.filter(img => !imagensParaRemover.includes(img.id)).length + novasImagens.length;
   
   if (totalImagens === 0) {
