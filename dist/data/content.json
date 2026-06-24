@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "versao": "1.0",
+    "ultimaAtualizacao": "2026-06-18",
+    "totalImagens": 15
+  },
+  "empresa": {
+    "nome": "Lulú Eventos",
+    "slogan": "Ornamentação para momentos especiais",
+    "telefone": "+258 865 771 736",
+    "whatsapp": "258865771736",
+    "email": "contacto@lulueventos.co.mz",
+    "facebook": "@ornamentacaolulu",
+    "instagram": "@ornamentacaolulu",
+    "endereco": "Maputo, Moçambique"
+  },
+  "precos": {
+    "pacoteStandard": [
+      {
+        "pessoas": 20,
+        "valor": 9000,
+        "moeda": "MT"
+      },
+      {
+        "pessoas": 30,
+        "valor": 10500,
+        "moeda": "MT"
+      },
+      {
+        "pessoas": 40,
+        "valor": 12000,
+        "moeda": "MT"
+      },
+      {
+        "pessoas": 50,
+        "valor": 13500,
+        "moeda": "MT"
+      },
+      {
+        "whitespaces": "yes",
+        "pessoas": 100,
+        "valor": 22000,
+        "moeda": "MT"
+      },
+      {
+        "pessoas": 150,
+        "valor": 30000,
+        "moeda": "MT"
+      }
+    ],
+    "inclusoesPacote": [
+      "Mesa de Honra Decorada com Flores do Campo",
+      "Painel de Fotos Temático (Redondo, Quadrado ou Hexagonal)",
+      "Mesa de Buffet Harmonizada",
+      "Mesa Exclusiva para Bolo e Doces Finos",
+      "Tapete de Entrada Premium (Vermelho)",
+      "Logística de Transporte Inclusa para Grande Maputo"
+    ]
+  },
+  "sobre": {
+    "titulo": "Designers de Eventos Incríveis",
+    "historia": "A Lulú Eventos nasceu da visão de que cada celebração deve ser uma obra de arte única. Há mais de 8 anos, atuamos no mercado moçambicano transformando espaços comuns em palácios de banquetes refinados, aliando paixão, técnica e dedicação meticulosa a cada detalhe decorativo.",
+    "missao": "Nossa missão é exceder expectativas, fornecendo serviços de ornamentação impecáveis com honestidade, pontualidade e extremo refinamento estético."
+  },
+  "galeria": [
+    {
+      "id": "img001",
+      "filename": "img-1770040312165-0.jpg",
+      "titulo": "Casamento Elegante",
+      "ordem": 0
+    },
+    {
+      "id": "img002",
+      "filename": "img-1770040312176-1.jpg",
+      "titulo": "Mesa de Honra de Luxo",
+      "ordem": 1
+    },
+    {
+      "id": "img003",
+      "filename": "img-1770040312178-2.jpg",
+      "titulo": "Ornamentação Clássica",
+      "ordem": 2
+    },
+    {
+      "id": "img004",
+      "filename": "img-1770040312179-3.jpg",
+      "titulo": "Decoração de Altar",
+      "ordem": 3
+    },
+    {
+      "id": "img005",
+      "filename": "img-1770040312180-4.jpg",
+      "titulo": "Centro de Mesa Sofisticado",
+      "ordem": 4
+    },
+    {
+      "id": "img006",
+      "filename": "img-1770040312180-5.jpg",
+      "titulo": "Painel de Fotos Temático",
+      "ordem": 5
+    },
+    {
+      "id": "img007",
+      "filename": "img-1770040312181-6.jpg",
+      "titulo": "Arranjo de Flores Premium",
+      "ordem": 6
+    },
+    {
+      "id": "img008",
+      "filename": "img-1770040312182-7.jpg",
+      "titulo": "Lounge Decorado",
+      "ordem": 7
+    },
+    {
+      "id": "img009",
+      "filename": "img-1770040312182-8.jpg",
+      "titulo": "Mesa de Doces Iluminada",
+      "ordem": 8
+    },
+    {
+      "id": "img010",
+      "filename": "img-1770040312183-9.jpg",
+      "titulo": "Festa ao Ar Livre",
+      "ordem": 9
+    },
+    {
+      "id": "img011",
+      "filename": "img-1770040312184-10.jpg",
+      "titulo": "Recepção Elegante",
+      "ordem": 10
+    },
+    {
+      "id": "img012",
+      "filename": "img-1770040312184-11.jpg",
+      "titulo": "Iluminação Cênica",
+      "ordem": 11
+    },
+    {
+      "id": "img013",
+      "filename": "img-1770040312185-12.jpg",
+      "titulo": "Bolo de Casamento Decorado",
+      "ordem": 12
+    },
+    {
+      "id": "img014",
+      "filename": "img-1770040312185-13.jpg",
+      "titulo": "Ornamentação Dourada",
+      "ordem": 13
+    },
+    {
+      "id": "img015",
+      "filename": "img-1770040312186-14.jpg",
+      "titulo": "Aniversário de Luxo",
+      "ordem": 14
+    }
+  ]
+}
